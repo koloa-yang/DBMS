@@ -4,11 +4,14 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-import javax.swing.JOptionPane;
+import DatabaseTree.DataBase;
+import DatabaseTree.DbList;
 
 public class CDatabase {
+	DbList dblist;
 	
-	public CDatabase(){
+	public CDatabase(DbList dblist){
+		this.dblist=dblist;
 	}
 	
 	//ÇÐ»»Êý¾Ý¿â
@@ -30,8 +33,9 @@ public class CDatabase {
 		pw.println("create database "+name);
 		try {
 			String get=br.readLine();
-			if(get!=null)
+			if(get!=null) {
 				return get;
+			}
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -44,8 +48,9 @@ public class CDatabase {
 		pw.println("drop database "+name);
 		try {
 			String get=br.readLine();
-			if(get!=null)
+			if(get!=null){
 				return get;
+			}
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

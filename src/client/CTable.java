@@ -4,17 +4,26 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 
+import javax.swing.JOptionPane;
+
+import DatabaseTree.DbList;
+import DatabaseTree.Property;
+import DatabaseTree.Table;
+
 public class CTable {
+	DbList dblist;
 	
-	public CTable(){
+	public CTable(DbList dblist){
+		this.dblist=dblist;
 	}
 	//创建表
-	public String createTable(String name,PrintWriter pw,BufferedReader br){
-		pw.println("create table "+name);
+	public String createTable(String dbName,String tableName,String propertys,PrintWriter pw,BufferedReader br){
+		pw.println("create table "+tableName+" ("+propertys+")");
 		try {
 			String get=br.readLine();
-			if(get!=null)
+			if(get!=null){
 				return get;
+			}
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -23,12 +32,13 @@ public class CTable {
 	}
 	
 	//删除表
-	public String dropTable(String name,PrintWriter pw,BufferedReader br){
-		pw.println("drop table "+name);
+	public String dropTable(String tableName,PrintWriter pw,BufferedReader br){
+		pw.println("drop table "+tableName);
 		try {
 			String get=br.readLine();
-			if(get!=null)
+			if(get!=null) {
 				return get;
+			}
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -37,12 +47,13 @@ public class CTable {
 	}
 	
 	//更新表名
-	public String updateName(String name,String newName,PrintWriter pw,BufferedReader br){
-		pw.println("alert table "+name+" rename to "+newName);
+	public String updateName(String tableName,String newTableName,PrintWriter pw,BufferedReader br){
+		pw.println("alert table "+tableName+" rename to "+newTableName);
 		try {
 			String get=br.readLine();
-			if(get!=null)
+			if(get!=null) {
 				return get;
+			}
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -64,17 +75,5 @@ public class CTable {
 		return "the server has some question";
 	} 
 	
-	//删除列
-	public String dropColumn(String name,String columnName,PrintWriter pw,BufferedReader br){
-		pw.println("alert table "+name+" drop "+columnName);
-		try {
-			String get=br.readLine();
-			if(get!=null)
-				return get;
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return "the server has some question";
-	} 
+	
 }

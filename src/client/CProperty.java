@@ -4,9 +4,14 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 
+import javax.swing.JOptionPane;
+
+import DatabaseTree.DbList;
+
 public class CProperty {
-	
-	public CProperty(){
+	DbList dblist;
+	public CProperty(DbList dblist){
+		this.dblist=dblist;
 	}
 	
 	/**
@@ -149,18 +154,20 @@ public class CProperty {
      * @param br
      * @return
      */
-    public String drop(String TableName,String propertyName,PrintWriter pw,BufferedReader br){
-    	pw.println("alter table "+TableName+" drop column "+propertyName);
-		try {
-			String get=br.readLine();
-			if(get!=null)
-				return get;
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return "the server has some question";
-    }
+  //É¾³ýÁÐ
+  	public String dropColumn(String tableName,String columnName,PrintWriter pw,BufferedReader br){
+  		pw.println("alter table "+tableName+" drop "+columnName);
+  		try {
+  			String get=br.readLine();
+  			if(get!=null) {
+  				return get;
+  			}
+  		} catch (IOException e) {
+  			// TODO Auto-generated catch block
+  			e.printStackTrace();
+  		}
+  		return "the server has some question";
+  	} 
     
     
     /**

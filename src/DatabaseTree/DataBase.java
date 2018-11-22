@@ -11,7 +11,9 @@ public class DataBase {
 	 * 初始化数据库
 	 * @return
 	 */
-	public DataBase(){
+	public DataBase(String name){
+		this.name=name;
+		tableList=new ArrayList<Table>();
 	}
 	
 	/**

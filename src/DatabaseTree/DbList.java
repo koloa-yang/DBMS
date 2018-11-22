@@ -15,6 +15,7 @@ public class DbList {
 	 * 初始化数据库列表
 	 */
 	public DbList(){
+		dbList=new ArrayList<DataBase>();
 	}
 	
 	//初始化一个database，从后端传入

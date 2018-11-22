@@ -7,9 +7,15 @@ public class Table {
 	//初始化变量
 	private String name;
 	private List<Property> propertyList;
+	
+	public Table(String name) {
+		this.name=name;
+		propertyList=new ArrayList<Property>();
+	}
 	/**
 	 * 常用方法
 	 */
+	
 	public Property getProperty(String name){
 		for(int i=0;i<propertyList.size();i++){
 			if(propertyList.get(i).getName().equals(name)){
@@ -43,7 +49,7 @@ public class Table {
 		return true;
 	}
 	
-	public boolean deleteTable(String TableName){
+	public boolean deleteProperty(String TableName){
 		int num=-1;
 		for(int i=0;i<propertyList.size();i++){
 			if(propertyList.get(i).getName().equals(TableName)){

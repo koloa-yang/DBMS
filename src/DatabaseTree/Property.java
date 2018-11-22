@@ -24,13 +24,28 @@ public class Property<T> {
 	private boolean isNull;//判定是否为空
 	private boolean unique;//判定可否有重复内容
 	
+	public Property(String name,String type){
+		content=new ArrayList<T>();
+		this.name=name;
+		this.type=type;
+	}
+	public Property(String name,String type,List<T> content,boolean primaryKey,boolean foreignKey,T defaultKey,int Max,int Min,T[] limit,boolean isNull,boolean unique) {
+		this.name=name;
+		this.type=type;
+		this.content=content;
+		this.primaryKey=primaryKey;
+		this.foreignKey=foreignKey;
+		this.defaultKey=defaultKey;
+		this.Max=Max;
+		this.Min=Min;
+		this.limit=limit;
+		this.isNull=isNull;
+		this.unique=unique;
+	}
 	/**
 	 * 常用方法
 	 */
-	public Property(String name){
-		content=new ArrayList<T>();
-		this.name=name;
-	}
+	
 	
 	public List<T> getAllContent(){
 		return content;
@@ -78,5 +93,9 @@ public class Property<T> {
 	
 	public void setUnique(boolean judge){
 		unique=judge;
+	}
+	
+	public void setContent(List list){
+		content=list;
 	}
 }

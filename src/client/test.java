@@ -8,7 +8,7 @@ import java.awt.event.*;
 import javax.swing.*;
 import DatabaseTree.DbList;
 
-public class Client extends JFrame{
+public class test extends JFrame{
 
 	
 	// network
@@ -27,7 +27,7 @@ public class Client extends JFrame{
 	private JPanel TreePanel;
 	private JPanel tablePanel;
 	private JMenuBar menuBar;
-	private JTree tree= new JTree();
+//	private JTree tree= new JTree();
 		
 	/**
 	 * Launch the application.
@@ -51,7 +51,7 @@ public class Client extends JFrame{
 	 * @throws IOException 
 	 * @throws UnknownHostException 
 	 */
-	public Client() throws UnknownHostException, IOException {
+	public test() throws UnknownHostException, IOException {
 		initialize();
 	}
 
@@ -64,29 +64,34 @@ public class Client extends JFrame{
 		addWindowListener(new WindowAdapter() {             //窗口关闭前关闭socket
 			@Override
 			public void windowClosing(WindowEvent e) {
-				if(cm.getConnected())
-					cm.connectedClose();
+//				if(cm.getConnected())
+//					cm.connectedClose();
+					try {
+						if(socket!=null)
+							socket.close();
+					} catch (IOException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
 			}
 		});
 		setTitle("Database Management System ");
 		setBounds(100, 100, 1280, 720);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		
 		contentPanel = new JPanel();
 		setContentPane(contentPanel);
 		contentPanel.setLayout(new BorderLayout(0, 0));
 		
-		TreePanel = new JPanel();
-		contentPanel.add(TreePanel, BorderLayout.WEST);
-		TreePanel.setLayout(new BorderLayout(0, 0));
-		
-		tablePanel = new JPanel();
-		contentPanel.add(tablePanel, BorderLayout.CENTER);
-		tablePanel.setLayout(new BorderLayout(0, 0));
+//		TreePanel = new JPanel();
+//		contentPanel.add(TreePanel, BorderLayout.WEST);
+//		TreePanel.setLayout(new BorderLayout(0, 0));
+//		
+//		tablePanel = new JPanel();
+//		contentPanel.add(tablePanel, BorderLayout.CENTER);
+//		tablePanel.setLayout(new BorderLayout(0, 0));
 			
 		menuBar = new JMenuBar();
 		setJMenuBar(menuBar);	
-//		contentPanel.add(tree, BorderLayout.WEST);
 		cm=new CMenu(menuBar,socket,pw,br,contentPanel,TreePanel,tablePanel);
 		cm.setMenu();
 		
