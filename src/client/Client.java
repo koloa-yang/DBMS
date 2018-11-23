@@ -6,22 +6,16 @@ import java.net.*;
 import java.awt.BorderLayout;
 import java.awt.event.*;
 import javax.swing.*;
-import DatabaseTree.DbList;
+
+import org.jb2011.lnf.beautyeye.BeautyEyeLNFHelper;
 
 public class Client extends JFrame{
 
-	
 	// network
 	private Socket socket;
-	private Socket[]sockets=new Socket[1000];
 	private BufferedReader br;
 	private PrintWriter pw;
-	private DbList dblist=new DbList();
-	private CDatabase cdb = new CDatabase(dblist);
-	private CTable ctb = new CTable(dblist);
-	private CProperty cpt =new CProperty(dblist);
 	private CMenu cm;
-	private Command command;
 		
 	// frame
 	private JPanel contentPanel;
@@ -40,6 +34,8 @@ public class Client extends JFrame{
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
+					BeautyEyeLNFHelper.frameBorderStyle = BeautyEyeLNFHelper.FrameBorderStyle.generalNoTranslucencyShadow;
+					org.jb2011.lnf.beautyeye.BeautyEyeLNFHelper.launchBeautyEyeLNF();
 					Client client = new Client();
 					client.setVisible(true);
 				} catch (Exception e) {
@@ -95,11 +91,10 @@ public class Client extends JFrame{
 		commandPanel = new JPanel();
 		rightPanel.add(commandPanel, BorderLayout.SOUTH);
 		commandPanel.setLayout(new BorderLayout(0, 0));
-		commandPanel.setPreferredSize(new Dimension(1000, 200));//用来设置JPanel的大小
+		commandPanel.setPreferredSize(new Dimension(0, 200));//用来设置JPanel的大小
 			
 		menuBar = new JMenuBar();
 		setJMenuBar(menuBar);	
-//		contentPanel.add(tree, BorderLayout.WEST);
 		cm=new CMenu(menuBar,socket,pw,br,commandPanel,TreePanel,tablePanel);
 		cm.setMenu();
 	}

@@ -39,7 +39,8 @@ public class EchoServer{
 	public static void main(String args[])throws IOException{
 	
 			new EchoServer().service();
-
+	
+		
 	}
 	
  
@@ -88,7 +89,8 @@ class Handler implements Runnable{
 				}catch(ArrayIndexOutOfBoundsException e) {
 					pw.println("invalid construction");
 				}
-								
+				
+				
 			}
 		} catch (IOException | ClassNotFoundException e) {
 			e.printStackTrace();

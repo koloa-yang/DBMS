@@ -4,6 +4,8 @@ import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
 import java.awt.Font;
 import java.awt.Window;
 import java.awt.event.ActionEvent;
@@ -40,7 +42,7 @@ public class Ziduan {
 
 			public void run() {
 				try {
-					 
+					frame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -80,19 +82,19 @@ public class Ziduan {
 		
 		
 		final ButtonGroup buttonGroup = new ButtonGroup();
-		JRadioButton intrdbtn = new JRadioButton("Int");
+		JRadioButton intrdbtn = new JRadioButton("int");
 		intrdbtn.setFont(new Font("宋体", Font.PLAIN, 20));
 		intrdbtn.setBounds(233, 239, 224, 41);
 		frame.getContentPane().add(intrdbtn);
 		buttonGroup.add(intrdbtn);
 		
-		JRadioButton varcharrdbtn = new JRadioButton("Varchar");
+		JRadioButton varcharrdbtn = new JRadioButton("varchar");
 		varcharrdbtn.setFont(new Font("宋体", Font.PLAIN, 20));
 		varcharrdbtn.setBounds(233, 302, 224, 41);
 		frame.getContentPane().add(varcharrdbtn);
 		buttonGroup.add(varcharrdbtn);
 		
-		JRadioButton doublerdbtn = new JRadioButton("Double");
+		JRadioButton doublerdbtn = new JRadioButton("double");
 		doublerdbtn.setFont(new Font("宋体", Font.PLAIN, 20));
 		doublerdbtn.setBounds(233, 365, 224, 41);
 		frame.getContentPane().add(doublerdbtn);
@@ -110,7 +112,6 @@ public class Ziduan {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 		handin.addActionListener(new ActionListener() {
-
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO 自动生成的方法存根
@@ -124,13 +125,18 @@ public class Ziduan {
 					break;     
 					}  
 				} 
-			get=name+" "+type;	
+			get=name+" "+type;
 			frame.dispose();
 			}
 			
 		});
 		
-		
+		cancel.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				frame.dispose();
+			}
+		});
 	}
 	
 	public String getName(){

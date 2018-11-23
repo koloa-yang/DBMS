@@ -6,6 +6,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,6 +17,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
+import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTree;
 import javax.swing.border.BevelBorder;
@@ -50,24 +52,24 @@ public class Tree {
 		private JButton btndelete=new JButton("删除数据");
 		//空白处
 		private JPopupMenu popMenu_tree_newdb;
-		private JMenuItem pop_tree_newdb;
+		JMenuItem pop_tree_newdb;
 		//数据库
 		private JPopupMenu popMenu_tree_db;
-		private JMenuItem pop_tree_db_newTable;
-		private JMenuItem pop_tree_db_del;
-		private JMenuItem pop_tree_db_rename;
-		private JMenuItem pop_tree_db_reRead;
-		private JMenuItem pop_tree_db_readSQLFile;
+		JMenuItem pop_tree_db_newTable;
+		JMenuItem pop_tree_db_del;
+		JMenuItem pop_tree_db_rename;
+		JMenuItem pop_tree_db_reRead;
+		JMenuItem pop_tree_db_readSQLFile;
 		//表
 		private JPopupMenu popMenu_tree_table;
-		private JMenuItem pop_tree_table_newProperty;
-		private JMenuItem pop_tree_table_del;
-		private JMenuItem pop_tree_table_rename;
+		JMenuItem pop_tree_table_newProperty;
+		JMenuItem pop_tree_table_del;
+		JMenuItem pop_tree_table_rename;
 		//字段
 		private JPopupMenu popMenu_tree_property;
-		private JMenuItem pop_tree_property_set;
-		private JMenuItem pop_tree_property_del;
-		private JMenuItem pop_tree_property_rename;
+		JMenuItem pop_tree_property_set;
+		JMenuItem pop_tree_property_del;
+		JMenuItem pop_tree_property_rename;
 			
 		public Tree(JPanel TreePanel,JPanel tablePanel,PrintWriter pw,BufferedReader br){
 			this.TreePanel=TreePanel;
@@ -152,33 +154,33 @@ public class Tree {
 							ctable.setTable();
 							///////////////////////洪容代码的调用方式
 						}
-						else if(selectNode.getLevel()==3) {//如果双击字段节点 右侧显示选中字段的数据信息
-							//右侧显示选中字段的数据信息（显示榕儿的界面） 一列
+					else if(selectNode.getLevel()==3) {//如果双击字段节点 右侧显示选中字段的数据信息
+						//右侧显示选中字段的数据信息（显示榕儿的界面） 一列
 //						int rownum=8; //此处需要获得记录的数量
-							
-							table=new JTable();
-							String[] columns={"ID"};//此处需要获得字段名称
-							DefaultTableModel model=new DefaultTableModel(columns,0);
-							table.setModel(model);
-							TableColumnModel columnModel=table.getColumnModel();
-							int count=columnModel.getColumnCount();
-							for(int i=0;i<count;i++){
-								javax.swing.table.TableColumn column=columnModel.getColumn(i);
-								column.setPreferredWidth(800);//设置列的宽度
-								}
-							model.addRow(new Object[]{16301001});//此处需要一行一行读数据，加进去
-							model.addRow(new Object[]{16301002});//此处需要一行一行读数据，加进去
-							model.addRow(new Object[]{16301003});//此处需要一行一行读数据，加进去
-							model.addRow(new Object[]{16301004});//此处需要一行一行读数据，加进去
-							
-	//						tablePanel.removeAll();
-							contentPanel.remove(tablePanel);
-							tablePanel = new JPanel();
-							contentPanel.add(tablePanel, BorderLayout.CENTER);
-							JTableHeader myt=table.getTableHeader();
-							tablePanel.add(myt,BorderLayout.NORTH);
-							tablePanel.add(table,BorderLayout.SOUTH);
-						}
+						
+						table=new JTable();
+						String[] columns={"ID"};//此处需要获得字段名称
+						DefaultTableModel model=new DefaultTableModel(columns,0);
+						table.setModel(model);
+						TableColumnModel columnModel=table.getColumnModel();
+						int count=columnModel.getColumnCount();
+						for(int i=0;i<count;i++){
+							javax.swing.table.TableColumn column=columnModel.getColumn(i);
+							column.setPreferredWidth(800);//设置列的宽度
+							}
+						model.addRow(new Object[]{16301001});//此处需要一行一行读数据，加进去
+						model.addRow(new Object[]{16301002});//此处需要一行一行读数据，加进去
+						model.addRow(new Object[]{16301003});//此处需要一行一行读数据，加进去
+						model.addRow(new Object[]{16301004});//此处需要一行一行读数据，加进去
+						
+//						tablePanel.removeAll();
+						contentPanel.remove(tablePanel);
+						tablePanel = new JPanel();
+						contentPanel.add(tablePanel, BorderLayout.CENTER);
+						JTableHeader myt=table.getTableHeader();
+						tablePanel.add(myt,BorderLayout.NORTH);
+						tablePanel.add(table,BorderLayout.SOUTH);
+					}
 					}
 				}
 				
@@ -198,18 +200,32 @@ public class Tree {
 				dblist.addDb(db);
 			}
 		
+		/**
+		 * 从后端接收初始的数据库信息
+		 */
+		public void getInfo(){
+			pw.println("getInfo");
+			try {
+				//收取后端传输过来的消息
+				String get=br.readLine();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
 		public void setListener(){
-			pop_tree_newdb.addMouseListener(treeMenu.newdb_mouseListner(pw,br));//新建数据库
-			pop_tree_db_newTable.addMouseListener(treeMenu.newTableFrame_mouseListner(treeMenu,pw,br));//新建表
-			pop_tree_db_del.addMouseListener(treeMenu.deleteDb_mouseListner(pw,br));//删除数据库
-	//		    pop_tree_db_rename.addMouseListener(treeMenu.renameDb_mouseListner(pw,br));//数据库重命名
+			pop_tree_newdb.addActionListener(treeMenu.newdb_mouseListner(pw,br));//新建数据库
+			pop_tree_db_newTable.addActionListener(treeMenu.newTableFrame_mouseListner(treeMenu,pw,br));//新建表
+			pop_tree_db_del.addActionListener(treeMenu.deleteDb_mouseListner(pw,br));//删除数据库
+//			pop_tree_db_rename.addMouseListener(treeMenu.renameDb_mouseListner(pw,br));//数据库重命名
 			pop_tree_db_reRead.addMouseListener(treeMenu.reReadDb_mouseListner());//刷新数据库
-	//		pop_tree_db_readSQLFile.addMouseListener(treeMenu.readSQL_mouseListner());//运行sql文件
-			pop_tree_table_newProperty.addMouseListener(treeMenu.newProperty_mouseListner(pw,br));//新建字段
-			pop_tree_table_del.addMouseListener(treeMenu.deleteTable_mouseListner(pw,br));//删除表
+//			pop_tree_db_readSQLFile.addMouseListener(treeMenu.readSQL_mouseListner());//运行sql文件
+			pop_tree_table_newProperty.addActionListener(treeMenu.newProperty_mouseListner(pw,br));//新建字段
+			pop_tree_table_del.addActionListener(treeMenu.deleteTable_mouseListner(pw,br));//删除表
 			pop_tree_table_rename.addMouseListener(treeMenu.renameTable_mouseListner(pw,br));//表重命名
-	//		pop_tree_property_set.addMouseListener(treeMenu.setProperty_mouseListner(tree));//修改字段属性
-			pop_tree_property_del.addMouseListener(treeMenu.deleteProperty_mouseListner(pw,br));//删除字段
+//			pop_tree_property_set.addMouseListener(treeMenu.setProperty_mouseListner(tree));//修改字段属性
+			pop_tree_property_del.addActionListener(treeMenu.deleteProperty_mouseListner(pw,br));//删除字段
 	//		pop_tree_property_rename.addMouseListener(treeMenu.renameProperty_mouseListner(tree));//字段重命名
 			test();
 			treeMenu.setTree();
@@ -217,5 +233,9 @@ public class Tree {
 		
 		public void setTreeMenu(){
 			treeMenu.setTree();
+		}
+		
+		public TreeMenu getTreeMenu(){
+			return treeMenu;
 		}
 }

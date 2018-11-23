@@ -1,5 +1,6 @@
 package client;
 
+import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.BufferedReader;
@@ -16,6 +17,7 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 
 public class CMenu {
 	//端口和IP
@@ -33,6 +35,9 @@ public class CMenu {
 	//传参
 	private PrintWriter pw;
 	private BufferedReader br;
+	private JPanel commandPanel;
+	private JPanel TreePanel;
+	private JPanel tablePanel;
 	//判断按钮
 	private boolean connected=false;
 	//建树
@@ -44,8 +49,9 @@ public class CMenu {
 		this.pw=pw;
 		this.br=br;
 		this.socket=socket;
-		tree=new Tree(TreePanel,tablePanel,pw, br);
-		command=new Command(commandPanel);
+		this.commandPanel=commandPanel;
+		this.TreePanel=TreePanel;
+		this.tablePanel=tablePanel;
 	}
 	
 	private PrintWriter getWriter(Socket socket)throws IOException{
@@ -71,16 +77,19 @@ public class CMenu {
 			public void actionPerformed(ActionEvent e){
 				try {
 					if(!connected){
+//						JOptionPane.showMessageDialog(null,"我到了","错误",JOptionPane.PLAIN_MESSAGE); 
 						//连接服务器
 						socket=new Socket(host,port);
 						br=getReader(socket);
 						pw=getWriter(socket);
 						connected=true;
 						//建树
+						tree=new Tree(TreePanel,tablePanel,pw, br);
 						tree.setTree();
 						tree.setListener();
 						tree.setTreeMenu();
 						//建命令行
+						command=new Command(commandPanel);
 						command.setCommand();
 					}	
 				} catch (UnknownHostException e1) {
@@ -117,12 +126,38 @@ public class CMenu {
 		
 		mntmNewMenuItem = new JMenuItem("新建数据库");
 		mnNewMenu2.add(mntmNewMenuItem);
+		mntmNewMenuItem.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e){
+				tree.pop_tree_newdb.doClick();
+			}
+		});
 		mntmNewMenuItem = new JMenuItem("删除数据库");
 		mnNewMenu2.add(mntmNewMenuItem);
+		mntmNewMenuItem.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e){
+				tree.pop_tree_db_del.doClick();
+			}
+		});
 		mntmNewMenuItem = new JMenuItem("切换数据库");
 		mnNewMenu2.add(mntmNewMenuItem);
+		mntmNewMenuItem.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e){
+				CDatabase cdb=new CDatabase(null);
+				String inputValue = JOptionPane.showInputDialog("Please input the database name");
+				String message=cdb.exchangDatabase(inputValue, pw, br);//切换数据库
+				JOptionPane.showMessageDialog(null,message,"Message",JOptionPane.PLAIN_MESSAGE);
+			}
+		});
 		mntmNewMenuItem = new JMenuItem("重命名");
 		mnNewMenu2.add(mntmNewMenuItem);
+		mntmNewMenuItem.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e){
+				CDatabase cdb=new CDatabase(null);
+				String inputValue = JOptionPane.showInputDialog("Please input the new database name");
+				//String message=cdb.exchangDatabase(inputValue, pw, br);//切换数据库
+				JOptionPane.showMessageDialog(null,"success","Message",JOptionPane.PLAIN_MESSAGE);
+			}
+		});
 		
 		//第三个menu标签
 		mnNewMenu3 = new JMenu("表");
@@ -130,10 +165,29 @@ public class CMenu {
 		
 		mntmNewMenuItem = new JMenuItem("创建表");
 		mnNewMenu3.add(mntmNewMenuItem);
+		mntmNewMenuItem.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e){
+				tree.pop_tree_db_newTable.doClick();
+			}
+		});
 		mntmNewMenuItem = new JMenuItem("删除表");
 		mnNewMenu3.add(mntmNewMenuItem);
+		mntmNewMenuItem.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e){
+				tree.pop_tree_table_del.doClick();
+			}
+		});
+		
 		mntmNewMenuItem = new JMenuItem("重命名");
 		mnNewMenu3.add(mntmNewMenuItem);
+		mntmNewMenuItem.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e){
+				CDatabase cdb=new CDatabase(null);
+				String inputValue = JOptionPane.showInputDialog("Please input the new table name");
+				//String message=cdb.exchangDatabase(inputValue, pw, br);//切换数据库
+				JOptionPane.showMessageDialog(null,"success","Message",JOptionPane.PLAIN_MESSAGE);
+			}
+		});
 		
 		//第四个menu标签
 		mnNewMenu4 = new JMenu("字段");
@@ -141,8 +195,18 @@ public class CMenu {
 		
 		mntmNewMenuItem = new JMenuItem("新字段");
 		mnNewMenu4.add(mntmNewMenuItem);
+		mntmNewMenuItem.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e){
+				tree.pop_tree_table_newProperty.doClick();
+			}
+		});
 		mntmNewMenuItem = new JMenuItem("删除字段");
 		mnNewMenu4.add(mntmNewMenuItem);
+		mntmNewMenuItem.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e){
+				tree.pop_tree_property_del.doClick();
+			}
+		});
 		mntmNewMenuItem = new JMenuItem("修改类型");
 		mnNewMenu4.add(mntmNewMenuItem);
 		mntmNewMenuItem = new JMenuItem("重命名");

@@ -6,6 +6,9 @@ import java.net.*;
 import java.awt.BorderLayout;
 import java.awt.event.*;
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumnModel;
+
 import DatabaseTree.DbList;
 
 public class test extends JFrame{
@@ -13,23 +16,26 @@ public class test extends JFrame{
 	
 	// network
 	private Socket socket;
-	Socket[]sockets=new Socket[1000];
-	BufferedReader br;
-	PrintWriter pw;
-	DbList dblist=new DbList();
-	CDatabase cdb = new CDatabase(dblist);
-	CTable ctb = new CTable(dblist);
-	CProperty cpt =new CProperty(dblist);
-	CMenu cm;
+	private Socket[]sockets=new Socket[1000];
+	private BufferedReader br;
+	private PrintWriter pw;
+	private DbList dblist=new DbList();
+	private CDatabase cdb = new CDatabase(dblist);
+	private CTable ctb = new CTable(dblist);
+	private CProperty cpt =new CProperty(dblist);
+	private CMenu cm;
+	private Command command;
 		
 	// frame
 	private JPanel contentPanel;
 	private JPanel rightPanel;
 	private JPanel TreePanel;
-	private JPanel tablePanel;
 	private JPanel commandPanel;
 	private JMenuBar menuBar;
-	private JPanel panel;
+	private JTree tree= new JTree();
+	private JScrollPane scrollPane;
+	private JTable table;
+	private JButton btnNewButton;
 		
 	/**
 	 * Launch the application.
@@ -39,7 +45,7 @@ public class test extends JFrame{
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					Client client = new Client();
+					test client = new test();
 					client.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -66,8 +72,6 @@ public class test extends JFrame{
 		addWindowListener(new WindowAdapter() {             //窗口关闭前关闭socket
 			@Override
 			public void windowClosing(WindowEvent e) {
-				if(cm.getConnected())
-					cm.connectedClose();
 			}
 		});
 		setTitle("Database Management System ");
@@ -85,25 +89,51 @@ public class test extends JFrame{
 		TreePanel = new JPanel();
 		contentPanel.add(TreePanel, BorderLayout.WEST);
 		TreePanel.setLayout(new BorderLayout(0, 0));
-		TreePanel.setPreferredSize(new Dimension(180, 700));//用来设置JPanel的大小
-		
-		tablePanel = new JPanel();
-		rightPanel.add(tablePanel, BorderLayout.CENTER);
-		tablePanel.setLayout(new BorderLayout(0, 0));
+		TreePanel.setPreferredSize(new Dimension(180, 700));
 		
 		commandPanel = new JPanel();
 		rightPanel.add(commandPanel, BorderLayout.SOUTH);
 		commandPanel.setLayout(new BorderLayout(0, 0));
-		commandPanel.setPreferredSize(new Dimension(1000, 200));//用来设置JPanel的大小
+		commandPanel.setPreferredSize(new Dimension(0, 200));//用来设置JPanel的大小
 			
 		menuBar = new JMenuBar();
-		setJMenuBar(menuBar);	
-//		contentPanel.add(tree, BorderLayout.WEST);
-		cm=new CMenu(menuBar,socket,pw,br,contentPanel,TreePanel,tablePanel);
+		setJMenuBar(menuBar);
+		table = new JTable();
+		String[] columns={"ID","姓名","性别"};//此处需要获得字段名称
+		final DefaultTableModel model=new DefaultTableModel(columns,0);
+		table.setModel(model);
+		TableColumnModel columnModel=table.getColumnModel();
+		int count=columnModel.getColumnCount();
+		for(int i=0;i<count;i++){
+			javax.swing.table.TableColumn column=columnModel.getColumn(i);
+			column.setPreferredWidth(800/count);//设置列的宽度
+			}
+		model.addRow(new Object[]{16301064,"fdd","男"});//此处需要一行一行读数据，加进去
+		model.addRow(new Object[]{16301065,"zxc","女"});//此处需要一行一行读数据，加进去
+		model.addRow(new Object[]{16301125,"jgb","男"});//此处需要一行一行读数据，加进去
+		model.addRow(new Object[]{16301064,"fdd","男"});//此处需要一行一行读数据，加进去
+		model.addRow(new Object[]{16301065,"zxc","女"});//此处需要一行一行读数据，加进去
+		model.addRow(new Object[]{16301125,"jgb","男"});//此处需要一行一行读数据，加进去
+		model.addRow(new Object[]{16301064,"fdd","男"});//此处需要一行一行读数据，加进去
+		model.addRow(new Object[]{16301065,"zxc","女"});//此处需要一行一行读数据，加进去
+		model.addRow(new Object[]{16301125,"jgb","男"});//此处需要一行一行读数据，加进去
+		model.addRow(new Object[]{16301064,"fdd","男"});//此处需要一行一行读数据，加进去
+		model.addRow(new Object[]{16301065,"zxc","女"});//此处需要一行一行读数据，加进去
+		model.addRow(new Object[]{16301125,"jgb","男"});//此处需要一行一行读数据，加进去
 		
-		panel = new JPanel();
-		rightPanel.add(panel, BorderLayout.WEST);
-		cm.setMenu();
 		
+		table.setShowHorizontalLines(false);
+		scrollPane = new JScrollPane(table);
+		scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+		rightPanel.add(scrollPane, BorderLayout.CENTER);
+		
+		btnNewButton = new JButton("New button");
+		scrollPane.add(btnNewButton);
+		
+
+		
+		
+		
+//		cm.setMenu();
 	}
 }

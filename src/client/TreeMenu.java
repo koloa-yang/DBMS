@@ -72,17 +72,17 @@ public class TreeMenu {
 		return dblist.getList().size();
 	}
 	//新建数据库 ok
-	public MouseListener newdb_mouseListner(final PrintWriter pw,final BufferedReader br) {
-		MouseListener listener=new MouseAdapter(){
+	public ActionListener newdb_mouseListner(final PrintWriter pw,final BufferedReader br) {
+		ActionListener listener=new ActionListener(){
 			@Override
-			public void mousePressed(MouseEvent e) {
+			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
 				String name;
 				System.out.println("进入点击事件");
 				label:
 					while(true) {
 						name=JOptionPane.showInputDialog(null,"请输入新建数据库的名字：\n","新建数据库",JOptionPane.PLAIN_MESSAGE); 
-						if(name!=null) {
+						if(name!=null) { 
 							String string=cdb.createDatabase(name, pw, br);
 							if(string.equals("success")) {
 								dblist.addDb(new DataBase(name));
@@ -102,10 +102,10 @@ public class TreeMenu {
 	}
 	
 	//新建表 ok
-	public MouseListener newTableFrame_mouseListner(final TreeMenu treeMenu,final PrintWriter pw,final BufferedReader br) {
-		MouseListener listener=new MouseAdapter(){
+	public ActionListener newTableFrame_mouseListner(final TreeMenu treeMenu,final PrintWriter pw,final BufferedReader br) {
+		ActionListener listener=new ActionListener(){
 			@Override
-			public void mousePressed(MouseEvent e) {
+			public void actionPerformed(ActionEvent e) {
 				EventQueue.invokeLater(new Runnable() {
 		            public void run() {
 		                try {
@@ -178,10 +178,10 @@ public class TreeMenu {
 		return listener;
 	}
 	//删除数据库 ok
-	public MouseListener deleteDb_mouseListner(final PrintWriter pw,final BufferedReader br) {
-		MouseListener listener=new MouseAdapter(){
+	public ActionListener deleteDb_mouseListner(final PrintWriter pw,final BufferedReader br) {
+		ActionListener listener=new ActionListener(){
 			@Override
-			public void mousePressed(MouseEvent e) {
+			public void actionPerformed(ActionEvent e) {
 				DefaultMutableTreeNode selectNode = (DefaultMutableTreeNode)tree.getLastSelectedPathComponent();
 				System.out.println("进入点击事件");
 				String string=cdb.dropDatabase(selectNode.toString(), pw, br);
@@ -257,10 +257,10 @@ public class TreeMenu {
 //	}
 	
 	//新建字段
-	public MouseListener newProperty_mouseListner(final PrintWriter pw,final BufferedReader br) {
-		MouseListener listener=new MouseAdapter(){
+	public ActionListener newProperty_mouseListner(final PrintWriter pw,final BufferedReader br) {
+		ActionListener listener=new ActionListener(){
 			@Override
-			public void mousePressed(MouseEvent e) {
+			public void actionPerformed(ActionEvent e) {
 				DefaultMutableTreeNode selectNode = (DefaultMutableTreeNode)tree.getLastSelectedPathComponent();//选中某表
 				for(int i=0;i<dblist.getDbNum();i++) {
 					if(dblist.getList().get(i).getName().equals(selectNode.getParent().toString())) {
@@ -268,9 +268,10 @@ public class TreeMenu {
 							if(dblist.getList().get(i).getDataBase().get(j).getName().equals(selectNode.toString())) {
 								Ziduan property=new Ziduan();
 								property.run();
+								JOptionPane.showMessageDialog(null,property.getName(),"错误",JOptionPane.PLAIN_MESSAGE);
 								dblist.getList().get(i).getDataBase().get(j).addProperty(new Property(property.getName(),property.getType()));
 								/**
-								 * 后续操作
+								 * 后续操作 晓宇加个循环
 								 */
 								break;
 							}
@@ -285,10 +286,10 @@ public class TreeMenu {
 	}
 	
 	//删除表 ok
-	public MouseListener deleteTable_mouseListner(final PrintWriter pw,final BufferedReader br) {
-		MouseListener listener=new MouseAdapter(){
+	public ActionListener deleteTable_mouseListner(final PrintWriter pw,final BufferedReader br) {
+		ActionListener listener=new ActionListener(){
 			@Override
-			public void mousePressed(MouseEvent e) {
+			public void actionPerformed(ActionEvent e) {
 				DefaultMutableTreeNode selectNode = (DefaultMutableTreeNode)tree.getLastSelectedPathComponent();//选中表
 				System.out.println("进入点击事件");
 				String change=cdb.exchangDatabase(selectNode.getParent().toString(), pw, br);//切换数据库
@@ -321,7 +322,7 @@ public class TreeMenu {
 		};
 		return listener;
 	}
-	//表重命名 ？？？？？？？？？？？？？？语法出错
+	//表重命名
 	public MouseListener renameTable_mouseListner(final PrintWriter pw,final BufferedReader br) {
 		MouseListener listener=new MouseAdapter(){
 			@Override
@@ -394,11 +395,11 @@ public class TreeMenu {
 //		};
 //		return listener;
 //	}
-	//删除字段 ？？？？？？？？？？？？？？无法再界面上删除
-	public MouseListener deleteProperty_mouseListner(final PrintWriter pw,final BufferedReader br) {
-		MouseListener listener=new MouseAdapter(){
+	//删除字段 
+	public ActionListener deleteProperty_mouseListner(final PrintWriter pw,final BufferedReader br) {
+		ActionListener listener=new ActionListener(){
 			@Override
-			public void mousePressed(MouseEvent e) {
+			public void actionPerformed(ActionEvent e) {
 				DefaultMutableTreeNode selectNode = (DefaultMutableTreeNode)tree.getLastSelectedPathComponent();//选中字段
 				System.out.println("进入点击事件");
 				String change=cdb.exchangDatabase(selectNode.getParent().getParent().toString(), pw, br);//切换数据库
