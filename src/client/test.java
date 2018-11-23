@@ -24,10 +24,12 @@ public class test extends JFrame{
 		
 	// frame
 	private JPanel contentPanel;
+	private JPanel rightPanel;
 	private JPanel TreePanel;
 	private JPanel tablePanel;
+	private JPanel commandPanel;
 	private JMenuBar menuBar;
-//	private JTree tree= new JTree();
+	private JPanel panel;
 		
 	/**
 	 * Launch the application.
@@ -64,35 +66,43 @@ public class test extends JFrame{
 		addWindowListener(new WindowAdapter() {             //窗口关闭前关闭socket
 			@Override
 			public void windowClosing(WindowEvent e) {
-//				if(cm.getConnected())
-//					cm.connectedClose();
-					try {
-						if(socket!=null)
-							socket.close();
-					} catch (IOException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					}
+				if(cm.getConnected())
+					cm.connectedClose();
 			}
 		});
 		setTitle("Database Management System ");
 		setBounds(100, 100, 1280, 720);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		
 		contentPanel = new JPanel();
 		setContentPane(contentPanel);
 		contentPanel.setLayout(new BorderLayout(0, 0));
 		
-//		TreePanel = new JPanel();
-//		contentPanel.add(TreePanel, BorderLayout.WEST);
-//		TreePanel.setLayout(new BorderLayout(0, 0));
-//		
-//		tablePanel = new JPanel();
-//		contentPanel.add(tablePanel, BorderLayout.CENTER);
-//		tablePanel.setLayout(new BorderLayout(0, 0));
+		rightPanel=new JPanel();
+		contentPanel.add(rightPanel, BorderLayout.CENTER);
+		rightPanel.setLayout(new BorderLayout(0, 0));
+		
+		TreePanel = new JPanel();
+		contentPanel.add(TreePanel, BorderLayout.WEST);
+		TreePanel.setLayout(new BorderLayout(0, 0));
+		TreePanel.setPreferredSize(new Dimension(180, 700));//用来设置JPanel的大小
+		
+		tablePanel = new JPanel();
+		rightPanel.add(tablePanel, BorderLayout.CENTER);
+		tablePanel.setLayout(new BorderLayout(0, 0));
+		
+		commandPanel = new JPanel();
+		rightPanel.add(commandPanel, BorderLayout.SOUTH);
+		commandPanel.setLayout(new BorderLayout(0, 0));
+		commandPanel.setPreferredSize(new Dimension(1000, 200));//用来设置JPanel的大小
 			
 		menuBar = new JMenuBar();
 		setJMenuBar(menuBar);	
+//		contentPanel.add(tree, BorderLayout.WEST);
 		cm=new CMenu(menuBar,socket,pw,br,contentPanel,TreePanel,tablePanel);
+		
+		panel = new JPanel();
+		rightPanel.add(panel, BorderLayout.WEST);
 		cm.setMenu();
 		
 	}

@@ -13,6 +13,7 @@ import java.util.List;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JTable;
@@ -144,51 +145,16 @@ public class Tree {
 					else if(e.getClickCount()==2) {
 						if(selectNode.getLevel()==2) {//如果双击表节点 打开表
 							//显示表内容（显示榕儿的界面）
-	//						int rownum=8; //此处需要获得记录的数量
-							
-							table=new JTable();
-							String[] columns={"ID","姓名","性别"};//此处需要获得字段名称
-							final DefaultTableModel model=new DefaultTableModel(columns,0);
-							table.setModel(model);
-							TableColumnModel columnModel=table.getColumnModel();
-							int count=columnModel.getColumnCount();
-							for(int i=0;i<count;i++){
-								javax.swing.table.TableColumn column=columnModel.getColumn(i);
-								column.setPreferredWidth(800/count);//设置列的宽度
-								}
-							model.addRow(new Object[]{16301064,"fdd","男"});//此处需要一行一行读数据，加进去
-							model.addRow(new Object[]{16301065,"zxc","女"});//此处需要一行一行读数据，加进去
-							model.addRow(new Object[]{16301125,"jgb","男"});//此处需要一行一行读数据，加进去
-							
-							//增加数据
-							btnadd.addActionListener(new ActionListener(){
-								public void actionPerformed(ActionEvent e){
-									model.addRow(new Object[]{});
-								}
-							});
-							
-							//删除数据
-							btndelete.addActionListener(new ActionListener(){
-								public void actionPerformed(ActionEvent e){
-									int selectedRow = table.getSelectedRow();//获得选中行的索引
-									if(selectedRow!=-1) //存在选中行
-									{
-									model.removeRow(selectedRow); //删除行
-									}
-								}
-							});
-							contentPanel.remove(tablePanel);
-							tablePanel = new JPanel();
-							contentPanel.add(tablePanel, BorderLayout.CENTER);
-							JTableHeader myt=table.getTableHeader();
-							tablePanel.add(myt,BorderLayout.NORTH);
-							tablePanel.add(table,BorderLayout.CENTER);
-							tablePanel.add(btnadd,BorderLayout.SOUTH);
-							tablePanel.add(btndelete,BorderLayout.SOUTH);
+							String[][] a=new String[1][1];
+							a[0][0]="0";
+							contentTable ctable=new contentTable(tablePanel,a);
+							///////////////////////洪容代码的调用方式
+							ctable.setTable();
+							///////////////////////洪容代码的调用方式
 						}
 						else if(selectNode.getLevel()==3) {//如果双击字段节点 右侧显示选中字段的数据信息
 							//右侧显示选中字段的数据信息（显示榕儿的界面） 一列
-	//						int rownum=8; //此处需要获得记录的数量
+//						int rownum=8; //此处需要获得记录的数量
 							
 							table=new JTable();
 							String[] columns={"ID"};//此处需要获得字段名称

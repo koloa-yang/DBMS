@@ -13,19 +13,22 @@ public class Client extends JFrame{
 	
 	// network
 	private Socket socket;
-	Socket[]sockets=new Socket[1000];
-	BufferedReader br;
-	PrintWriter pw;
-	DbList dblist=new DbList();
-	CDatabase cdb = new CDatabase(dblist);
-	CTable ctb = new CTable(dblist);
-	CProperty cpt =new CProperty(dblist);
-	CMenu cm;
+	private Socket[]sockets=new Socket[1000];
+	private BufferedReader br;
+	private PrintWriter pw;
+	private DbList dblist=new DbList();
+	private CDatabase cdb = new CDatabase(dblist);
+	private CTable ctb = new CTable(dblist);
+	private CProperty cpt =new CProperty(dblist);
+	private CMenu cm;
+	private Command command;
 		
 	// frame
 	private JPanel contentPanel;
+	private JPanel rightPanel;
 	private JPanel TreePanel;
 	private JPanel tablePanel;
+	private JPanel commandPanel;
 	private JMenuBar menuBar;
 	private JTree tree= new JTree();
 		
@@ -76,19 +79,28 @@ public class Client extends JFrame{
 		setContentPane(contentPanel);
 		contentPanel.setLayout(new BorderLayout(0, 0));
 		
+		rightPanel=new JPanel();
+		contentPanel.add(rightPanel, BorderLayout.CENTER);
+		rightPanel.setLayout(new BorderLayout(0, 0));
+		
 		TreePanel = new JPanel();
 		contentPanel.add(TreePanel, BorderLayout.WEST);
 		TreePanel.setLayout(new BorderLayout(0, 0));
+		TreePanel.setPreferredSize(new Dimension(180, 700));//用来设置JPanel的大小
 		
 		tablePanel = new JPanel();
-		contentPanel.add(tablePanel, BorderLayout.CENTER);
+		rightPanel.add(tablePanel, BorderLayout.CENTER);
 		tablePanel.setLayout(new BorderLayout(0, 0));
+		
+		commandPanel = new JPanel();
+		rightPanel.add(commandPanel, BorderLayout.SOUTH);
+		commandPanel.setLayout(new BorderLayout(0, 0));
+		commandPanel.setPreferredSize(new Dimension(1000, 200));//用来设置JPanel的大小
 			
 		menuBar = new JMenuBar();
 		setJMenuBar(menuBar);	
 //		contentPanel.add(tree, BorderLayout.WEST);
-		cm=new CMenu(menuBar,socket,pw,br,contentPanel,TreePanel,tablePanel);
+		cm=new CMenu(menuBar,socket,pw,br,commandPanel,TreePanel,tablePanel);
 		cm.setMenu();
-		
 	}
 }

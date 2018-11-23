@@ -33,19 +33,19 @@ public class CMenu {
 	//传参
 	private PrintWriter pw;
 	private BufferedReader br;
-	private JPanel contentPanel;
 	//判断按钮
 	private boolean connected=false;
 	//建树
 	private Tree tree;
-	
-	public CMenu(JMenuBar menuBar,Socket socket,final PrintWriter pw,final BufferedReader br,JPanel contentPanel,JPanel TreePanel,JPanel tablePanel){
+	//建命令行
+	private Command command;
+	public CMenu(JMenuBar menuBar,Socket socket,final PrintWriter pw,final BufferedReader br,JPanel commandPanel,JPanel TreePanel,JPanel tablePanel){
 		this.menuBar=menuBar;
 		this.pw=pw;
 		this.br=br;
 		this.socket=socket;
-		this.contentPanel=contentPanel;
 		tree=new Tree(TreePanel,tablePanel,pw, br);
+		command=new Command(commandPanel);
 	}
 	
 	private PrintWriter getWriter(Socket socket)throws IOException{
@@ -71,13 +71,17 @@ public class CMenu {
 			public void actionPerformed(ActionEvent e){
 				try {
 					if(!connected){
+						//连接服务器
 						socket=new Socket(host,port);
 						br=getReader(socket);
 						pw=getWriter(socket);
 						connected=true;
+						//建树
 						tree.setTree();
 						tree.setListener();
 						tree.setTreeMenu();
+						//建命令行
+						command.setCommand();
 					}	
 				} catch (UnknownHostException e1) {
 					// TODO Auto-generated catch block
