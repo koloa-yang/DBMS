@@ -85,7 +85,9 @@ public class TreeMenu {
 						if(name!=null) { 
 							String string=cdb.createDatabase(name, pw, br);
 							if(string.equals("success")) {
-								dblist.addDb(new DataBase(name));
+								DataBase new_db=new DataBase(name);
+								new_db.setRead(true);
+								dblist.addDb(new_db);
 								setTree();
 								break;
 							}
@@ -111,6 +113,7 @@ public class TreeMenu {
 		                try {
 		                	frame = new AddTableFrame(treeMenu,pw,br);
 							frame.setLocation(830, 350);
+							frame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
 							frame.setVisible(true);
 		                } catch (Exception e) {
 		                    e.printStackTrace();
@@ -147,6 +150,7 @@ public class TreeMenu {
 								for(int i=0;i<dblist.getDbNum();i++) {
 									if(dblist.getList().get(i).getName().equals(selectNode.toString())) {
 										Table table=new Table(name);
+										table.setRead(true);
 										Property property;
 										String[] str2;
 										String[] strings=new String[2];

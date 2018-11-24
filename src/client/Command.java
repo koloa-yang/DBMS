@@ -39,11 +39,11 @@ public class Command {
 			   String back="";
 			   pw.println(content);
 			   try {
-				back=br.readLine();
-			} catch (IOException e) {
+				   back=br.readLine();
+			  } catch (IOException e) {
 				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+				  e.printStackTrace();
+			  }
 			   String out=textArea_out.getText();
 			   if(content.contains("select")){
 				   

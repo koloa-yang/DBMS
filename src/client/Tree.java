@@ -145,29 +145,38 @@ public class Tree {
 							
 	                }
 					else if(e.getClickCount()==1&&e.getClickCount()!=2){
-						if(selectNode.getLevel()==1)
-							treeMenu.getTable(pw, br);
-						if(selectNode.getLevel()==2){
-							String tableName=selectNode.toString();
-							treeMenu.getProperty(tableName, pw, br);
+						try{
+							if(selectNode.getLevel()==1)
+								treeMenu.getTable(pw, br);
+							if(selectNode.getLevel()==2){
+								String tableName=selectNode.toString();
+								treeMenu.getProperty(tableName, pw, br);
+							}
+						}
+						catch(Exception e1){
+							
 						}
 							
 					}
 					else if(e.getClickCount()==2) {
-						if(selectNode.getLevel()==2) {//如果双击表节点 打开表	
-							cdb.exchangDatabase(selectNode.getParent().toString(), pw, br);//切换数据库
-							//插入表
-							contentTable ctable=new contentTable(tablePanel,cpt,pw, br);
-							int childNum = selectNode.getChildCount();
-							String[] headers = new String[childNum];
-							for(int i=0;i<childNum;i++){
-								headers[i]=selectNode.getChildAt(i).toString();
+						try{
+							if(selectNode.getLevel()==2) {//如果双击表节点 打开表	
+								cdb.exchangDatabase(selectNode.getParent().toString(), pw, br);//切换数据库
+								//插入表
+								contentTable ctable=new contentTable(tablePanel,cpt,pw, br);
+								int childNum = selectNode.getChildCount();
+								String[] headers = new String[childNum];
+								for(int i=0;i<childNum;i++){
+									headers[i]=selectNode.getChildAt(i).toString();
+								}
+								String[][] content=cpt.select(selectNode.toString(), "*", null, pw, br);
+								ctable.setTable(headers,content,selectNode.toString());
 							}
-							String[][] content=cpt.select(selectNode.toString(), "*", null, pw, br);
-							ctable.setTable(headers,content,selectNode.toString());
+							else if(selectNode.getLevel()==3) {//如果双击字段节点 右侧显示选中字段的数据信息
+								
+							}
 						}
-						else if(selectNode.getLevel()==3) {//如果双击字段节点 右侧显示选中字段的数据信息
-							
+						catch(Exception e1){
 						}
 					}
 				}
