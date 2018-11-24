@@ -6,6 +6,7 @@ import java.util.List;
 public class DataBase {
 	//初始化变量
 	private String name;
+	private boolean read=false;
 	private List<Table> tableList;
 	/**
 	 * 初始化数据库
@@ -59,5 +60,13 @@ public class DataBase {
 		}
 		else
 			return false;
+	}
+	
+	public boolean getRead(){
+		return read;
+	}
+	
+	public void setRead(boolean now){
+		read=now;
 	}
 }

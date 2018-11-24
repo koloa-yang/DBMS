@@ -36,6 +36,7 @@ public class test extends JFrame{
 	private JScrollPane scrollPane;
 	private JTable table;
 	private JButton btnNewButton;
+	private JTextPane textPane;
 		
 	/**
 	 * Launch the application.
@@ -95,6 +96,9 @@ public class test extends JFrame{
 		rightPanel.add(commandPanel, BorderLayout.SOUTH);
 		commandPanel.setLayout(new BorderLayout(0, 0));
 		commandPanel.setPreferredSize(new Dimension(0, 200));//用来设置JPanel的大小
+		
+		textPane = new JTextPane();
+		commandPanel.add(textPane, BorderLayout.CENTER);
 			
 		menuBar = new JMenuBar();
 		setJMenuBar(menuBar);

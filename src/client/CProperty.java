@@ -18,6 +18,8 @@ public class CProperty {
 	 * 为了方便传输，将插入内容全部集成在两个string字符串中
 	 * typeString中存储要插入的字段集合,字段由','作为分隔符
 	 * contentString中存储插入每个字段对应的具体值，每个具体值由','作为分割符!!!!!注意其中可能会有varchar类型的参数，varchar类型必须带‘’
+	 * 
+	 * 
 	 * 例如：insert into student(sno,sname) values(1630,'张三')
 	 * @param TableName
 	 * @param typeStr
@@ -134,7 +136,7 @@ public class CProperty {
      * @return
      */
     public String add(String TableName,String propertyName,String propertyType,PrintWriter pw,BufferedReader br){
-    	pw.println("alter table "+TableName+" add("+propertyName+" "+propertyType+")");
+    	pw.println("alter table "+TableName+" add "+propertyName+" "+propertyType);
 		try {
 			String get=br.readLine();
 			if(get!=null)

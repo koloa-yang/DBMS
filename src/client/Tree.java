@@ -144,43 +144,31 @@ public class Tree {
 						}
 							
 	                }
-					else if(e.getClickCount()==2) {
-						if(selectNode.getLevel()==2) {//如果双击表节点 打开表
-							//显示表内容（显示榕儿的界面）
-							String[][] a=new String[1][1];
-							a[0][0]="0";
-							contentTable ctable=new contentTable(tablePanel,a);
-							///////////////////////洪容代码的调用方式
-							ctable.setTable();
-							///////////////////////洪容代码的调用方式
+					else if(e.getClickCount()==1&&e.getClickCount()!=2){
+						if(selectNode.getLevel()==1)
+							treeMenu.getTable(pw, br);
+						if(selectNode.getLevel()==2){
+							String tableName=selectNode.toString();
+							treeMenu.getProperty(tableName, pw, br);
 						}
-					else if(selectNode.getLevel()==3) {//如果双击字段节点 右侧显示选中字段的数据信息
-						//右侧显示选中字段的数据信息（显示榕儿的界面） 一列
-//						int rownum=8; //此处需要获得记录的数量
-						
-						table=new JTable();
-						String[] columns={"ID"};//此处需要获得字段名称
-						DefaultTableModel model=new DefaultTableModel(columns,0);
-						table.setModel(model);
-						TableColumnModel columnModel=table.getColumnModel();
-						int count=columnModel.getColumnCount();
-						for(int i=0;i<count;i++){
-							javax.swing.table.TableColumn column=columnModel.getColumn(i);
-							column.setPreferredWidth(800);//设置列的宽度
-							}
-						model.addRow(new Object[]{16301001});//此处需要一行一行读数据，加进去
-						model.addRow(new Object[]{16301002});//此处需要一行一行读数据，加进去
-						model.addRow(new Object[]{16301003});//此处需要一行一行读数据，加进去
-						model.addRow(new Object[]{16301004});//此处需要一行一行读数据，加进去
-						
-//						tablePanel.removeAll();
-						contentPanel.remove(tablePanel);
-						tablePanel = new JPanel();
-						contentPanel.add(tablePanel, BorderLayout.CENTER);
-						JTableHeader myt=table.getTableHeader();
-						tablePanel.add(myt,BorderLayout.NORTH);
-						tablePanel.add(table,BorderLayout.SOUTH);
+							
 					}
+					else if(e.getClickCount()==2) {
+						if(selectNode.getLevel()==2) {//如果双击表节点 打开表	
+							cdb.exchangDatabase(selectNode.getParent().toString(), pw, br);//切换数据库
+							//插入表
+							contentTable ctable=new contentTable(tablePanel,cpt,pw, br);
+							int childNum = selectNode.getChildCount();
+							String[] headers = new String[childNum];
+							for(int i=0;i<childNum;i++){
+								headers[i]=selectNode.getChildAt(i).toString();
+							}
+							String[][] content=cpt.select(selectNode.toString(), "*", null, pw, br);
+							ctable.setTable(headers,content,selectNode.toString());
+						}
+						else if(selectNode.getLevel()==3) {//如果双击字段节点 右侧显示选中字段的数据信息
+							
+						}
 					}
 				}
 				
@@ -188,17 +176,17 @@ public class Tree {
 			TreePanel.add(tree, BorderLayout.CENTER);
 		}
 		
-		public void test() {
-				Property<Integer> id=new Property<Integer>("id","int");
-				Table student =new Table("student");
-				DataBase db=new DataBase("ggg");
-				List<Integer> list=new ArrayList<Integer>();
-				list.add(1630);
-				id.setContent(list);
-				student.addProperty(id);
-				db.addTable(student);
-				dblist.addDb(db);
-			}
+//		public void test() {
+//				Property<Integer> id=new Property<Integer>("id","int");
+//				Table student =new Table("student");
+//				DataBase db=new DataBase("ggg");
+//				List<Integer> list=new ArrayList<Integer>();
+//				list.add(1630);
+//				id.setContent(list);
+//				student.addProperty(id);
+//				db.addTable(student);
+//				dblist.addDb(db);
+//			}
 		
 		/**
 		 * 从后端接收初始的数据库信息
@@ -227,12 +215,11 @@ public class Tree {
 //			pop_tree_property_set.addMouseListener(treeMenu.setProperty_mouseListner(tree));//修改字段属性
 			pop_tree_property_del.addActionListener(treeMenu.deleteProperty_mouseListner(pw,br));//删除字段
 	//		pop_tree_property_rename.addMouseListener(treeMenu.renameProperty_mouseListner(tree));//字段重命名
-			test();
 			treeMenu.setTree();
 		}
 		
 		public void setTreeMenu(){
-			treeMenu.setTree();
+			treeMenu.getDatabase(pw, br);
 		}
 		
 		public TreeMenu getTreeMenu(){

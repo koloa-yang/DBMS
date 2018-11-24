@@ -268,7 +268,6 @@ public class TreeMenu {
 							if(dblist.getList().get(i).getDataBase().get(j).getName().equals(selectNode.toString())) {
 								Ziduan property=new Ziduan();
 								property.run();
-								JOptionPane.showMessageDialog(null,property.getName(),"错误",JOptionPane.PLAIN_MESSAGE);
 								dblist.getList().get(i).getDataBase().get(j).addProperty(new Property(property.getName(),property.getType()));
 								/**
 								 * 后续操作 晓宇加个循环
@@ -434,6 +433,90 @@ public class TreeMenu {
 			}
 		};
 		return listener;
+	}
+	
+	//获取数据库中的数据库个数及名称
+	public void getDatabase(PrintWriter pw,BufferedReader br){
+		pw.println("get database");
+		String[] databaseName = null;
+		try {
+			int num=Integer.valueOf(br.readLine());
+			databaseName=new String[num];
+			for(int i=0;i<num;i++){
+				databaseName[i]=br.readLine();
+				dblist.addDb(new DataBase(databaseName[i]));
+			}
+			setTree();
+		} catch (IOException e) {
+			JOptionPane.showMessageDialog(null,"出错了","错误",JOptionPane.PLAIN_MESSAGE);
+		}
+	}
+	
+	//获取数据库中的表个数及名称
+	public void getTable(PrintWriter pw,BufferedReader br){
+		String[] tableName = null;
+		DefaultMutableTreeNode selectNode = (DefaultMutableTreeNode)tree.getLastSelectedPathComponent();
+		String change=cdb.exchangDatabase(selectNode.toString(), pw, br);//切换数据库
+		DataBase db = null;
+		for(int i=0;i<dblist.getDbNum();i++) {
+			if(dblist.getList().get(i).getName().equals(selectNode.toString())) {
+				db = dblist.getList().get(i);
+				break;
+			}
+		}
+		if(!db.getRead()){
+			if(change.equals("success")){
+				pw.println("get table");
+				try {
+					int num=Integer.valueOf(br.readLine());
+					tableName=new String[num];
+					for(int i=0;i<num;i++){
+						tableName[i]=br.readLine(); 
+						db.addTable(new Table(tableName[i]));
+					}
+					db.setRead(true);
+					setTree();
+				} catch (IOException e) {
+					JOptionPane.showMessageDialog(null,"出错了","错误",JOptionPane.PLAIN_MESSAGE);
+				}
+			}
+		}
+	}
+		
+	//获取数据库中的表中字段数
+	public void getProperty(String tableName,PrintWriter pw,BufferedReader br){
+		DefaultMutableTreeNode selectNode = (DefaultMutableTreeNode)tree.getLastSelectedPathComponent();
+		String change=cdb.exchangDatabase(selectNode.getParent().toString(), pw, br);//切换数据库
+		Table table=null;
+		for(int i=0;i<dblist.getDbNum();i++) {
+			if(dblist.getList().get(i).getName().equals(selectNode.getParent().toString())) {
+				for(int j=0;j<dblist.getList().get(i).getTableNum();j++) {
+					if(dblist.getList().get(i).getDataBase().get(j).getName().equals(selectNode.toString())) {
+						table=dblist.getList().get(i).getDataBase().get(j);
+						break;
+					}
+				}
+				break;
+			}
+		}
+		if(!table.getRead()){
+			if(change.equals("success")){
+				pw.println("get property on "+tableName);
+				String[] propertyName = null;
+				try {
+					int num=Integer.valueOf(br.readLine());
+					propertyName=new String[num];
+					for(int i=0;i<num;i++){
+						propertyName[i]=br.readLine(); 
+						table.addProperty(new Property(propertyName[i],"varchar"));
+					}
+					table.setRead(true);
+					setTree();
+				} catch (IOException e) {
+					JOptionPane.showMessageDialog(null,"你出错了","错误",JOptionPane.PLAIN_MESSAGE);
+				}
+			}
+		}
 	}
 //	//字段重命名
 //	public MouseListener renameProperty_mouseListner(final JTree tree,DbList dblist) {

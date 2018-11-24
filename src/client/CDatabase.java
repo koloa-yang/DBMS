@@ -4,6 +4,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 
+import javax.swing.JOptionPane;
+
 import DatabaseTree.DataBase;
 import DatabaseTree.DbList;
 
@@ -57,4 +59,6 @@ public class CDatabase {
 		}
 		return "the server has some question";
 	}
+	
+	
 }

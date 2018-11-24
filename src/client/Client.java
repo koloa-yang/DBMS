@@ -24,8 +24,6 @@ public class Client extends JFrame{
 	private JPanel tablePanel;
 	private JPanel commandPanel;
 	private JMenuBar menuBar;
-	private JTree tree= new JTree();
-		
 	/**
 	 * Launch the application.
 	 */
@@ -34,7 +32,7 @@ public class Client extends JFrame{
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					BeautyEyeLNFHelper.frameBorderStyle = BeautyEyeLNFHelper.FrameBorderStyle.generalNoTranslucencyShadow;
+					BeautyEyeLNFHelper.frameBorderStyle = BeautyEyeLNFHelper.FrameBorderStyle.osLookAndFeelDecorated;
 					org.jb2011.lnf.beautyeye.BeautyEyeLNFHelper.launchBeautyEyeLNF();
 					Client client = new Client();
 					client.setVisible(true);
@@ -87,6 +85,7 @@ public class Client extends JFrame{
 		tablePanel = new JPanel();
 		rightPanel.add(tablePanel, BorderLayout.CENTER);
 		tablePanel.setLayout(new BorderLayout(0, 0));
+		tablePanel.setBackground(Color.white);
 		
 		commandPanel = new JPanel();
 		rightPanel.add(commandPanel, BorderLayout.SOUTH);

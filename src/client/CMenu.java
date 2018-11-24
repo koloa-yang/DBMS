@@ -89,7 +89,7 @@ public class CMenu {
 						tree.setListener();
 						tree.setTreeMenu();
 						//Ω®√¸¡Ó––
-						command=new Command(commandPanel);
+						command=new Command(commandPanel,pw,br);
 						command.setCommand();
 					}	
 				} catch (UnknownHostException e1) {

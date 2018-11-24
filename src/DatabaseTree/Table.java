@@ -7,7 +7,7 @@ public class Table {
 	//初始化变量
 	private String name;
 	private List<Property> propertyList;
-	
+	private boolean read=false;
 	public Table(String name) {
 		this.name=name;
 		propertyList=new ArrayList<Property>();
@@ -63,5 +63,13 @@ public class Table {
 		}
 		else
 			return false;
+	}
+	
+	public boolean getRead(){
+		return read;
+	}
+	
+	public void setRead(boolean now){
+		read=now;
 	}
 }

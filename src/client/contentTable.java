@@ -5,6 +5,9 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedReader;
+import java.io.PrintWriter;
+import java.math.BigDecimal;
 
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
@@ -21,17 +24,19 @@ import javax.swing.table.TableColumnModel;
  */
 public class contentTable {
 	//初始变量
-	private String[][] content;
 	private JPanel tablePanel;
 	private JButton btnadd;
 	private JButton btndelete;
 	private JTable table;
 	private JScrollPane scrollPane;
 	private DefaultTableModel model;
+	private String[] header;
+	private CProperty cpt;
+	private String tableName;
 	//构造函数
-	public contentTable(JPanel tablePanel,String[][] content){
+	public contentTable(JPanel tablePanel,final CProperty cpt,final PrintWriter pw,final BufferedReader br){
+		this.cpt=cpt;
 		this.tablePanel=tablePanel;
-		this.content=content;
 		btnadd=new JButton("增加数据");
 		btndelete=new JButton("删除数据");
 		btnadd.setPreferredSize(new Dimension(96, 40));
@@ -39,7 +44,43 @@ public class contentTable {
 		//增加数据
 		btnadd.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
-				model.addRow(new Object[]{});
+				model.fireTableDataChanged();
+				int rowNum=model.getRowCount();//行数
+//				JOptionPane.showMessageDialog(null,rowNum,"增加数量",JOptionPane.PLAIN_MESSAGE);
+				//拼接字符串
+				String typeStr="";
+				String contentStr="";
+//				String sss=model.getValueAt(0, 0).toString();
+//				JOptionPane.showMessageDialog(null,"成功读取","错误",JOptionPane.PLAIN_MESSAGE);
+				for(int i=0;i<model.getColumnCount();i++){
+					typeStr+=header[i];
+					if(isNumeric(model.getValueAt(rowNum-1, i).toString()))
+						contentStr+=model.getValueAt(rowNum-1, i).toString();
+					else
+						contentStr=contentStr+"\""+model.getValueAt(rowNum-1, i).toString()+"\"";
+					if(i!=model.getColumnCount()-1){
+						typeStr+=",";
+						contentStr+=",";
+					}
+				}
+				String message=cpt.insert(tableName, typeStr, contentStr, pw, br);
+				if(message.equals("success")){
+					//加一行空行用于添加数据
+					String[] white=new String[header.length];
+					for(int i=0;i<white.length;i++)
+						white[i]="";
+					model.addRow(white);
+				}
+				else{
+					model.removeRow(model.getColumnCount()-1);
+					JOptionPane.showMessageDialog(null,message,"错误",JOptionPane.PLAIN_MESSAGE);
+					//加一行空行用于添加数据
+					String[] white=new String[header.length];
+					for(int i=0;i<white.length;i++)
+						white[i]="";
+					model.addRow(white);
+				}
+				
 			}
 		});
 		
@@ -47,20 +88,34 @@ public class contentTable {
 		btndelete.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
 				int selectedRow = table.getSelectedRow();//获得选中行的索引
-				if(selectedRow!=-1) //存在选中行
+				model.fireTableDataChanged();
+				int rowNum=model.getRowCount();//行数
+//				JOptionPane.showMessageDialog(null,rowNum,"删除数量",JOptionPane.PLAIN_MESSAGE);
+//				JOptionPane.showMessageDialog(null,selectedRow,"删除索引",JOptionPane.PLAIN_MESSAGE);
+				if(selectedRow!=-1&&selectedRow!=(model.getColumnCount()-1)) //存在选中行
 				{
-				model.removeRow(selectedRow); //删除行
+					String limit="";
+					limit+=header[0];
+					limit+="=";
+					limit+=model.getValueAt(selectedRow, 0);
+					String message=cpt.delete(tableName, limit, pw, br);
+					JOptionPane.showMessageDialog(null,message,"删除成功",JOptionPane.PLAIN_MESSAGE);
+					model.removeRow(selectedRow); //删除行
 				}
+				else
+					JOptionPane.showMessageDialog(null,"请正确的选择要删除的内容","错误",JOptionPane.PLAIN_MESSAGE);
 			}
 		});
 	}
 	
 	//构建table
-	public void setTable(){//一下变注视代码可以实现表格的一般操作
+	public void setTable(String[] header,String[][] content,String tableName){//一下变注视代码可以实现表格的一般操作
+		this.tableName=tableName;
 		tablePanel.removeAll();
 		table=new JTable();
-		String[] columns={"ID","姓名","性别"};//此处需要获得字段名称
-		model=new DefaultTableModel(columns,0);
+		this.header=header;
+//		String[] columns={"ID","姓名","性别"};//此处需要获得字段名称
+		model=new DefaultTableModel(header,0);
 		table.setModel(model);
 		TableColumnModel columnModel=table.getColumnModel();
 		int count=columnModel.getColumnCount();
@@ -68,9 +123,19 @@ public class contentTable {
 			javax.swing.table.TableColumn column=columnModel.getColumn(i);
 			column.setPreferredWidth(800/count);//设置列的宽度
 			}
-		model.addRow(new Object[]{16301064,"fdd","男"});//此处需要一行一行读数据，加进去
-		model.addRow(new Object[]{16301065,"zxc","女"});//此处需要一行一行读数据，加进去
-		model.addRow(new Object[]{16301125,"jgb","男"});//此处需要一行一行读数据，加进去
+		for(int i=0;i<content.length;i++){
+			String[] str=new String[content[i].length];
+			for(int j=0;j<content[i].length;j++){
+				str[j]=content[i][j];
+			}
+			model.addRow(str);
+		}
+		
+		//加一行空行用于添加数据
+		String[] white=new String[header.length];
+		for(int i=0;i<white.length;i++)
+			white[i]="";
+		model.addRow(white);
 		
 		
 		JTableHeader myt=table.getTableHeader();
@@ -87,11 +152,21 @@ public class contentTable {
 		butt.add(btnadd);
 		butt.add(btndelete);
 		tablePanel.add(butt, BorderLayout.SOUTH);
-//		JOptionPane.showMessageDialog(null,"我到了","错误",JOptionPane.PLAIN_MESSAGE); 
 	}
 	
 	public void addProperty(){
 		
 	}
+	
+	//判断数字和字符串
+	public static boolean isNumeric(String str) {
+        String bigStr;
+        try {
+            bigStr = new BigDecimal(str).toString();
+        } catch (Exception e) {
+            return false;//异常 说明包含非数字。
+        }
+        return true;
+    }
 	
 }
