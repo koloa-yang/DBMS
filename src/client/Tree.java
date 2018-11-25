@@ -220,7 +220,7 @@ public class Tree {
 //			pop_tree_db_rename.addMouseListener(treeMenu.renameDb_mouseListner(pw,br));//数据库重命名
 			pop_tree_db_reRead.addMouseListener(treeMenu.reReadDb_mouseListner());//刷新数据库
 //			pop_tree_db_readSQLFile.addMouseListener(treeMenu.readSQL_mouseListner());//运行sql文件
-			pop_tree_table_newProperty.addActionListener(treeMenu.newProperty_mouseListner(pw,br));//新建字段
+			pop_tree_table_newProperty.addActionListener(treeMenu.newPropertyFrame_actionListner(treeMenu,pw,br));//新建字段
 			pop_tree_table_del.addActionListener(treeMenu.deleteTable_mouseListner(pw,br));//删除表
 			pop_tree_table_rename.addMouseListener(treeMenu.renameTable_mouseListner(pw,br));//表重命名
 //			pop_tree_property_set.addMouseListener(treeMenu.setProperty_mouseListner(tree));//修改字段属性

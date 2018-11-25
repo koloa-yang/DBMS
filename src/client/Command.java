@@ -27,7 +27,7 @@ public class Command {
 		textArea_out=new JTextPane();
 		textArea_out.setEditable(false);
 		textArea_out.setBackground(Color.black);
-		textArea_out.setText("Microsoft Windows [版本 10.0.17134.407]\n(c) 2018 Microsoft Corporation。保留所有权利。\n SQL*Plus: Release 11.2.0.1.0\nCopyright (c) 1982, 2010, SQL.All rights reserved.\nSQL>");
+		textArea_out.setText("Microsoft Windows [版本 10.0.17134.407]\n(c) 2018 Microsoft Corporation。保留所有权利。\nSQL*Plus: Release 11.2.0.1.0\nCopyright (c) 1982, 2010, SQL.All rights reserved.\nSQL>");
 		textArea_out.setForeground(Color.white);
 		textField_in=new JTextField();
 		textField_in.setPreferredSize(new Dimension(0, 30));

@@ -136,8 +136,8 @@ public class CProperty {
      * @param br
      * @return
      */
-    public String add(String TableName,String propertyName,String propertyType,PrintWriter pw,BufferedReader br){
-    	pw.println("alter table "+TableName+" add "+propertyName+" "+propertyType);
+    public String add(String TableName,String propertyStr,PrintWriter pw,BufferedReader br){
+    	pw.println("alter table "+TableName+" add "+propertyStr);
 		try {
 			String get=br.readLine();
 			if(get!=null)

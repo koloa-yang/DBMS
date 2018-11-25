@@ -7,32 +7,21 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.net.UnknownHostException;
-
-import javax.swing.JButton;
-import javax.swing.JFileChooser;
 import javax.swing.JFrame;
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JPopupMenu;
-import javax.swing.JTable;
 import javax.swing.JTree;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
-import javax.swing.tree.TreePath;
 
 import DatabaseTree.*;
+import frames.AddPropertyFrame;
 import frames.AddTableFrame;
-import frames.Ziduan;
 
 public class TreeMenu {
 	AddTableFrame frame;
+	AddPropertyFrame addPropertyFrame;
 	CDatabase cdb;
 	CTable ctb;
 	CProperty cpt;
@@ -77,8 +66,6 @@ public class TreeMenu {
 			ActionListener listener=new ActionListener(){
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					// TODO Auto-generated method stub
-					String name;
 					System.out.println("进入点击事件");
 					
 				}
@@ -94,25 +81,24 @@ public class TreeMenu {
 				// TODO Auto-generated method stub
 				String name;
 				System.out.println("进入点击事件");
-				label:
-					while(true) {
-						name=JOptionPane.showInputDialog(null,"请输入新建数据库的名字：\n","新建数据库",JOptionPane.PLAIN_MESSAGE); 
-						if(name!=null) { 
-							String string=cdb.createDatabase(name, pw, br);
-							if(string.equals("success")) {
-								DataBase new_db=new DataBase(name);
-								new_db.setRead(true);
-								dblist.addDb(new_db);
-								setTree();
-								break;
-							}
-							else {
-								JOptionPane.showMessageDialog(null,string,"错误",JOptionPane.PLAIN_MESSAGE); 
-								break;
-							}
+				while(true) {
+					name=JOptionPane.showInputDialog(null,"请输入新建数据库的名字：\n","新建数据库",JOptionPane.PLAIN_MESSAGE); 
+					if(name!=null) { 
+						String string=cdb.createDatabase(name, pw, br);
+						if(string.equals("success")) {
+							DataBase new_db=new DataBase(name);
+							new_db.setRead(true);
+							dblist.addDb(new_db);
+							setTree();
+							break;
 						}
-						else return;
+						else {
+							JOptionPane.showMessageDialog(null,string,"错误",JOptionPane.PLAIN_MESSAGE); 
+							break;
+						}
 					}
+					else return;
+				}
 			}
 		};
 		return listener;
@@ -158,13 +144,7 @@ public class TreeMenu {
 						while(true) {
 							String change=cdb.exchangDatabase(selectNode.toString(), pw, br);//切换数据库
 							if(change.equals("success")) {
-//								String[] str; 
 								String propertys;
-//								str=frame.getStr();		
-//								name=str[0];
-//								System.out.println(name);
-//								propertys=str[1];
-//								System.out.println(propertys);
 								name=frame.getTableName();
 								propertys=frame.getPropertyStr();
 								frame.dispose();
@@ -244,35 +224,81 @@ public class TreeMenu {
 	}
 	
 	
-	//新建字段
-	public ActionListener newProperty_mouseListner(final PrintWriter pw,final BufferedReader br) {
-		ActionListener listener=new ActionListener(){
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				DefaultMutableTreeNode selectNode = (DefaultMutableTreeNode)tree.getLastSelectedPathComponent();//选中某表
-				if(selectNode!=null&&selectNode.getLevel()==2){
-					for(int i=0;i<dblist.getDbNum();i++) {
-						if(dblist.getList().get(i).getName().equals(selectNode.getParent().toString())) {
-							for(int j=0;j<dblist.getList().get(i).getTableNum();j++) {
-								if(dblist.getList().get(i).getDataBase().get(j).getName().equals(selectNode.toString())) {
-									Ziduan property=new Ziduan();
-									property.run();
-									dblist.getList().get(i).getDataBase().get(j).addProperty(new Property(property.getName(),property.getType()));
-									/**
-									 * 后续操作 晓宇加个循环
-									 */
+	//新建字段 ok
+		public ActionListener newPropertyFrame_actionListner(final TreeMenu treeMenu,final PrintWriter pw,final BufferedReader br) {
+			ActionListener listener=new ActionListener(){
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					EventQueue.invokeLater(new Runnable() {
+			            public void run() {
+			                try {
+			                	addPropertyFrame = new AddPropertyFrame(treeMenu,pw,br);
+			                	addPropertyFrame.setLocation(830, 350);
+			                	addPropertyFrame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+			                	addPropertyFrame.setVisible(true);
+			                } catch (Exception e) {
+			                    e.printStackTrace();
+			                }
+			            }
+			        });
+				}
+			};
+			return listener;
+		}
+			
+		//新建字段窗口调用
+		public ActionListener newProperty_actionListner(final PrintWriter pw,final BufferedReader br) {
+			ActionListener listener=new ActionListener(){
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					DefaultMutableTreeNode selectNode = (DefaultMutableTreeNode)tree.getLastSelectedPathComponent();//选中某表
+					System.out.println("进入点击事件");
+					String change=cdb.exchangDatabase(selectNode.getParent().toString(), pw, br);//切换数据库
+					if(change.equals("success")) {
+						String p_name=addPropertyFrame.getPropertyName();
+						if(p_name.equals("")) {
+							JOptionPane.showMessageDialog(null,"请输入字段名！","错误",JOptionPane.PLAIN_MESSAGE); 
+							return;
+						}
+						String property=addPropertyFrame.getPropertyStr();
+						String p_type=addPropertyFrame.getP_type();
+						Boolean p_notnull=addPropertyFrame.getP_notnull();
+						Boolean p_unique=addPropertyFrame.getP_unique();
+						System.out.println(property);
+						addPropertyFrame.dispose();
+						String string=cpt.add(selectNode.toString(),property, pw, br);
+						if(string.equals("success")) {
+							for(int i=0;i<dblist.getDbNum();i++) {
+								if(dblist.getList().get(i).getName().equals(selectNode.getParent().toString())) {
+									for(int j=0;j<dblist.getList().get(i).getTableNum();j++) {
+										if(dblist.getList().get(i).getDataBase().get(j).getName().equals(selectNode.toString())) {
+											for(int k=0;k<dblist.getList().get(i).getDataBase().get(j).getPropertyNum();k++) {
+												if(dblist.getList().get(i).getDataBase().get(j).getProperty(p_name)!=null) {
+													JOptionPane.showMessageDialog(null,"字段名重复！创建失败！","错误",JOptionPane.PLAIN_MESSAGE); 
+													return;
+												}
+											}
+											dblist.getList().get(i).getDataBase().get(j).addProperty(new Property(p_name, p_type));
+											setTree();
+											break;
+										}
+									}
 									break;
 								}
 							}
-							break;
+
+						}
+						else {
+							JOptionPane.showMessageDialog(null,string,"错误",JOptionPane.PLAIN_MESSAGE); 
 						}
 					}
-			        //setTree(tree);
+					else {
+						JOptionPane.showMessageDialog(null,change,"错误",JOptionPane.PLAIN_MESSAGE); 
+					}
 				}
-			}
-		};
-		return listener;
-	}
+			};
+			return listener;
+		}
 	
 	//删除表 ok
 	public ActionListener deleteTable_mouseListner(final PrintWriter pw,final BufferedReader br) {

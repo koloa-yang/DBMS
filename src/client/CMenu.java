@@ -117,8 +117,6 @@ public class CMenu {
 					else
 						JOptionPane.showMessageDialog(null,"备份失败","错误",JOptionPane.PLAIN_MESSAGE);
 				} catch (IOException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
 				}
 			}
 		});
@@ -135,8 +133,6 @@ public class CMenu {
 					ttt = br.readLine();
 					JOptionPane.showConfirmDialog(null, ttt, ttt, JOptionPane.YES_NO_OPTION);
 				} catch (IOException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
 				}	
 			}
 		});
@@ -150,36 +146,52 @@ public class CMenu {
 		mnNewMenu2.add(mntmNewMenuItem);
 		mntmNewMenuItem.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
+				try{
 				tree.pop_tree_newdb.doClick();
+				}catch(Exception e1){
+					
+				}
 			}
 		});
 		mntmNewMenuItem = new JMenuItem("删除数据库");
 		mnNewMenu2.add(mntmNewMenuItem);
 		mntmNewMenuItem.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
-				tree.pop_tree_db_del.doClick();
+				try{
+					tree.pop_tree_db_del.doClick();
+					}catch(Exception e1){
+				}
 			}
 		});
 		mntmNewMenuItem = new JMenuItem("切换数据库");
 		mnNewMenu2.add(mntmNewMenuItem);
 		mntmNewMenuItem.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
-				CDatabase cdb=new CDatabase(null);
-				String inputValue = JOptionPane.showInputDialog("Please input the database name");
-				if(inputValue!=null){
-					String message=cdb.exchangDatabase(inputValue, pw, br);//切换数据库
-					JOptionPane.showMessageDialog(null,message,"Message",JOptionPane.PLAIN_MESSAGE);
-				}
+				try{
+					if(pw==null)
+						throw new Exception();
+					CDatabase cdb=new CDatabase(null);
+					String inputValue = JOptionPane.showInputDialog("Please input the database name");
+					if(inputValue!=null){
+						String message=cdb.exchangDatabase(inputValue, pw, br);//切换数据库
+						JOptionPane.showMessageDialog(null,message,"Message",JOptionPane.PLAIN_MESSAGE);
+					}
+					}catch(Exception e1){
+					}
+				
 			}
 		});
 		mntmNewMenuItem = new JMenuItem("重命名");
 		mnNewMenu2.add(mntmNewMenuItem);
 		mntmNewMenuItem.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
-				CDatabase cdb=new CDatabase(null);
-				String inputValue = JOptionPane.showInputDialog("Please input the new database name");
-				//String message=cdb.exchangDatabase(inputValue, pw, br);//切换数据库
-				JOptionPane.showMessageDialog(null,"success","Message",JOptionPane.PLAIN_MESSAGE);
+				try{
+					CDatabase cdb=new CDatabase(null);
+					String inputValue = JOptionPane.showInputDialog("Please input the new database name");
+					//String message=cdb.exchangDatabase(inputValue, pw, br);//切换数据库
+					JOptionPane.showMessageDialog(null,"success","Message",JOptionPane.PLAIN_MESSAGE);
+					}catch(Exception e1){
+				}
 			}
 		});
 		
@@ -191,14 +203,20 @@ public class CMenu {
 		mnNewMenu3.add(mntmNewMenuItem);
 		mntmNewMenuItem.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
-				tree.pop_tree_db_newTable.doClick();
+				try{
+					tree.pop_tree_db_newTable.doClick();
+					}catch(Exception e1){
+				}
 			}
 		});
 		mntmNewMenuItem = new JMenuItem("删除表");
 		mnNewMenu3.add(mntmNewMenuItem);
 		mntmNewMenuItem.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
-				tree.pop_tree_table_del.doClick();
+				try{
+					tree.pop_tree_table_del.doClick();
+					}catch(Exception e1){
+				}
 			}
 		});
 		
@@ -206,10 +224,13 @@ public class CMenu {
 		mnNewMenu3.add(mntmNewMenuItem);
 		mntmNewMenuItem.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
-				CDatabase cdb=new CDatabase(null);
-				String inputValue = JOptionPane.showInputDialog("Please input the new table name");
-				//String message=cdb.exchangDatabase(inputValue, pw, br);//切换数据库
-				JOptionPane.showMessageDialog(null,"success","Message",JOptionPane.PLAIN_MESSAGE);
+				try{
+					CDatabase cdb=new CDatabase(null);
+					String inputValue = JOptionPane.showInputDialog("Please input the new table name");
+					//String message=cdb.exchangDatabase(inputValue, pw, br);//切换数据库
+					JOptionPane.showMessageDialog(null,"success","Message",JOptionPane.PLAIN_MESSAGE);
+					}catch(Exception e1){
+				}
 			}
 		});
 		
@@ -221,14 +242,20 @@ public class CMenu {
 		mnNewMenu4.add(mntmNewMenuItem);
 		mntmNewMenuItem.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
-				tree.pop_tree_table_newProperty.doClick();
+				try{
+					tree.pop_tree_table_newProperty.doClick();
+					}catch(Exception e1){
+				}
 			}
 		});
 		mntmNewMenuItem = new JMenuItem("删除字段");
 		mnNewMenu4.add(mntmNewMenuItem);
 		mntmNewMenuItem.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
-				tree.pop_tree_property_del.doClick();
+				try{
+					tree.pop_tree_property_del.doClick();
+					}catch(Exception e1){
+				}
 			}
 		});
 		mntmNewMenuItem = new JMenuItem("修改类型");
