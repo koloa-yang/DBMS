@@ -8,6 +8,7 @@ import java.awt.event.MouseEvent;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -53,6 +54,7 @@ public class Tree {
 		//空白处
 		private JPopupMenu popMenu_tree_newdb;
 		JMenuItem pop_tree_newdb;
+		JMenuItem pop_tree_refreshdb;
 		//数据库
 		private JPopupMenu popMenu_tree_db;
 		JMenuItem pop_tree_db_newTable;
@@ -80,6 +82,8 @@ public class Tree {
 			popMenu_tree_newdb=new JPopupMenu();
 			pop_tree_newdb=new JMenuItem("新建数据库");
 			popMenu_tree_newdb.add(pop_tree_newdb);
+			pop_tree_refreshdb=new JMenuItem("刷新");
+			popMenu_tree_newdb.add(pop_tree_refreshdb);
 			
 			popMenu_tree_db=new JPopupMenu();
 			pop_tree_db_newTable=new JMenuItem("新建表");
@@ -121,13 +125,37 @@ public class Tree {
 			this.tree.addMouseListener(new MouseAdapter() {
 				 
 				@Override
-				public void mouseReleased(MouseEvent e) {
+				public void mouseClicked(MouseEvent e) {
 					// TODO Auto-generated method stub
 					//super.mouseReleased(e);
+//					System.out.println("点击");
 					TreePath path = tree.getPathForLocation(e.getX(), e.getY());
 					tree.setSelectionPath(path);
 					DefaultMutableTreeNode selectNode = (DefaultMutableTreeNode)tree.getLastSelectedPathComponent();
-					if (e.isPopupTrigger()&&e.getButton() == MouseEvent.BUTTON3) { 
+					if(e.getClickCount()==2){
+						System.out.println("双击");
+						try{
+							if(selectNode.getLevel()==2) {//如果双击表节点 打开表	
+								cdb.exchangDatabase(selectNode.getParent().toString(), pw, br);//切换数据库
+								//插入表
+								contentTable ctable=new contentTable(tablePanel,cpt,pw, br);
+								
+								int childNum = selectNode.getChildCount();
+								String[] headers = new String[childNum];
+								for(int i=0;i<childNum;i++){
+									headers[i]=selectNode.getChildAt(i).toString();
+								}
+								String[][] content=cpt.select(selectNode.toString(), "*", null, pw, br);
+								ctable.setTable(headers,content,selectNode.toString());
+							}
+						}
+						catch(Exception e1){
+						}
+						
+							
+					}
+					else if (e.getClickCount()==1&&e.getButton() == MouseEvent.BUTTON3) { 
+						System.out.println("右键");
 						if(selectNode!=null) {
 							if(selectNode.getLevel()==1) {//0是根节点 1是数据库 2是表 3是列
 								popMenu_tree_db.show(TreePanel, e.getX(), e.getY()+30);
@@ -144,7 +172,8 @@ public class Tree {
 						}
 							
 	                }
-					else if(e.getClickCount()==1&&e.getClickCount()!=2){
+					else if(e.getClickCount()==1) {
+						System.out.println("单击");
 						try{
 							if(selectNode.getLevel()==1)
 								treeMenu.getTable(pw, br);
@@ -156,29 +185,8 @@ public class Tree {
 						catch(Exception e1){
 							
 						}
-							
 					}
-					else if(e.getClickCount()==2) {
-						try{
-							if(selectNode.getLevel()==2) {//如果双击表节点 打开表	
-								cdb.exchangDatabase(selectNode.getParent().toString(), pw, br);//切换数据库
-								//插入表
-								contentTable ctable=new contentTable(tablePanel,cpt,pw, br);
-								int childNum = selectNode.getChildCount();
-								String[] headers = new String[childNum];
-								for(int i=0;i<childNum;i++){
-									headers[i]=selectNode.getChildAt(i).toString();
-								}
-								String[][] content=cpt.select(selectNode.toString(), "*", null, pw, br);
-								ctable.setTable(headers,content,selectNode.toString());
-							}
-							else if(selectNode.getLevel()==3) {//如果双击字段节点 右侧显示选中字段的数据信息
-								
-							}
-						}
-						catch(Exception e1){
-						}
-					}
+					
 				}
 				
 			});
@@ -197,22 +205,16 @@ public class Tree {
 //				dblist.addDb(db);
 //			}
 		
-		/**
-		 * 从后端接收初始的数据库信息
-		 */
-		public void getInfo(){
-			pw.println("getInfo");
-			try {
-				//收取后端传输过来的消息
-				String get=br.readLine();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
 		
 		public void setListener(){
 			pop_tree_newdb.addActionListener(treeMenu.newdb_mouseListner(pw,br));//新建数据库
+			pop_tree_refreshdb.addActionListener(new ActionListener(){//刷新树表
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					refreshTree();
+					
+				}
+			});
 			pop_tree_db_newTable.addActionListener(treeMenu.newTableFrame_mouseListner(treeMenu,pw,br));//新建表
 			pop_tree_db_del.addActionListener(treeMenu.deleteDb_mouseListner(pw,br));//删除数据库
 //			pop_tree_db_rename.addMouseListener(treeMenu.renameDb_mouseListner(pw,br));//数据库重命名
@@ -225,6 +227,17 @@ public class Tree {
 			pop_tree_property_del.addActionListener(treeMenu.deleteProperty_mouseListner(pw,br));//删除字段
 	//		pop_tree_property_rename.addMouseListener(treeMenu.renameProperty_mouseListner(tree));//字段重命名
 			treeMenu.setTree();
+		}
+		
+		public void refreshTree(){
+			TreePanel.removeAll();
+			tablePanel.removeAll();
+			TreePanel.repaint();
+			//建树
+			dblist=new DbList();
+			setTree();
+			setListener();
+			setTreeMenu();
 		}
 		
 		public void setTreeMenu(){

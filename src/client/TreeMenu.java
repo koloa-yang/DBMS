@@ -71,6 +71,21 @@ public class TreeMenu {
 			));				
 		return dblist.getList().size();
 	}
+	
+	//刷新数据库 ok
+		public ActionListener refreshdb_mouseListner(final PrintWriter pw,final BufferedReader br) {
+			ActionListener listener=new ActionListener(){
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					// TODO Auto-generated method stub
+					String name;
+					System.out.println("进入点击事件");
+					
+				}
+			};
+			return listener;
+		}
+	
 	//新建数据库 ok
 	public ActionListener newdb_mouseListner(final PrintWriter pw,final BufferedReader br) {
 		ActionListener listener=new ActionListener(){
@@ -169,7 +184,7 @@ public class TreeMenu {
 							}
 							else {
 								JOptionPane.showMessageDialog(null,string,"错误",JOptionPane.PLAIN_MESSAGE); 
-								continue label;
+								break;
 							}
 						}
 						else {

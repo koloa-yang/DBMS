@@ -49,7 +49,8 @@ public class Command {
 				   
 			   }
 			   else{
-				   out+=back;
+				   out+=content+"\n----";
+				   out+=back+"----\n\nSQL>";
 				   textArea_out.setText(out);
 			   }
 				   

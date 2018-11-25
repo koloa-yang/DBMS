@@ -77,21 +77,21 @@ public class CMenu {
 			public void actionPerformed(ActionEvent e){
 				try {
 					if(!connected){
-//						JOptionPane.showMessageDialog(null,"我到了","错误",JOptionPane.PLAIN_MESSAGE); 
 						//连接服务器
 						socket=new Socket(host,port);
 						br=getReader(socket);
 						pw=getWriter(socket);
 						connected=true;
-						//建树
-						tree=new Tree(TreePanel,tablePanel,pw, br);
-						tree.setTree();
-						tree.setListener();
-						tree.setTreeMenu();
-						//建命令行
-						command=new Command(commandPanel,pw,br);
-						command.setCommand();
-					}	
+					}
+					//建树
+					tree=new Tree(TreePanel,tablePanel,pw, br);
+					tree.setTree();
+					tree.setListener();
+					tree.setTreeMenu();
+					//建命令行
+					command=new Command(commandPanel,pw,br);
+					command.setCommand();
+						
 				} catch (UnknownHostException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();

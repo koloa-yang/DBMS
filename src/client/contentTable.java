@@ -72,7 +72,7 @@ public class contentTable {
 					model.addRow(white);
 				}
 				else{
-					model.removeRow(model.getColumnCount()-1);
+					model.removeRow(model.getRowCount()-1);
 					JOptionPane.showMessageDialog(null,message,"错误",JOptionPane.PLAIN_MESSAGE);
 					//加一行空行用于添加数据
 					String[] white=new String[header.length];
@@ -90,9 +90,11 @@ public class contentTable {
 				int selectedRow = table.getSelectedRow();//获得选中行的索引
 				model.fireTableDataChanged();
 				int rowNum=model.getRowCount();//行数
+				System.out.println(selectedRow);
+				System.out.println(rowNum);
 //				JOptionPane.showMessageDialog(null,rowNum,"删除数量",JOptionPane.PLAIN_MESSAGE);
 //				JOptionPane.showMessageDialog(null,selectedRow,"删除索引",JOptionPane.PLAIN_MESSAGE);
-				if(selectedRow!=-1&&selectedRow!=(model.getColumnCount()-1)) //存在选中行
+				if(selectedRow!=-1&&selectedRow!=(rowNum-1)) //存在选中行
 				{
 					String limit="";
 					limit+=header[0];
