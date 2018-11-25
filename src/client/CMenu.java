@@ -94,12 +94,8 @@ public class CMenu {
 						command.setCommand();
 					}
 						
-				} catch (UnknownHostException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				} catch (IOException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
+				} catch (Exception e1) {
+					JOptionPane.showMessageDialog(null,"服务器连接失败","Message",JOptionPane.PLAIN_MESSAGE);
 				}
 			}
 		});
@@ -211,17 +207,17 @@ public class CMenu {
 		
 		mntmNewMenuItem = new JMenuItem("重命名");
 		mnNewMenu3.add(mntmNewMenuItem);
-		mntmNewMenuItem.addActionListener(new ActionListener(){
-			public void actionPerformed(ActionEvent e){
-				try{
-					CDatabase cdb=new CDatabase(null);
-					String inputValue = JOptionPane.showInputDialog("Please input the new table name");
-					//String message=cdb.exchangDatabase(inputValue, pw, br);//切换数据库
-					JOptionPane.showMessageDialog(null,"success","Message",JOptionPane.PLAIN_MESSAGE);
-					}catch(Exception e1){
-				}
-			}
-		});
+//		mntmNewMenuItem.addActionListener(new ActionListener(){
+//			public void actionPerformed(ActionEvent e){
+//				try{
+//					CDatabase cdb=new CDatabase(null);
+//					String inputValue = JOptionPane.showInputDialog("Please input the new table name");
+//					//String message=cdb.exchangDatabase(inputValue, pw, br);//切换数据库
+//					JOptionPane.showMessageDialog(null,"success","Message",JOptionPane.PLAIN_MESSAGE);
+//					}catch(Exception e1){
+//				}
+//			}
+//		});
 		
 		//第四个menu标签
 		mnNewMenu4 = new JMenu("字段");
