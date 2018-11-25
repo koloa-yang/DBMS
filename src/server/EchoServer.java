@@ -78,6 +78,7 @@ class Handler implements Runnable{
 			String msg=null;
 			AnalysisSQL analysisSQL = new AnalysisSQL(pw);
 			while ((msg=br.readLine())!=null) {        //接收客户端发送的sql语句
+				System.out.println(msg);
 				try {
 					sql.Message message = analysisSQL.work(msg);        //处理sql语句
 					if(message.flag!=1) {

@@ -108,7 +108,7 @@ public class TreeMenu {
 							}
 							else {
 								JOptionPane.showMessageDialog(null,string,"错误",JOptionPane.PLAIN_MESSAGE); 
-								continue label;	
+								break;
 							}
 						}
 						else return;
@@ -126,10 +126,15 @@ public class TreeMenu {
 				EventQueue.invokeLater(new Runnable() {
 		            public void run() {
 		                try {
-		                	frame = new AddTableFrame(treeMenu,pw,br);
-							frame.setLocation(830, 350);
-							frame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
-							frame.setVisible(true);
+		                	DefaultMutableTreeNode selectNode = (DefaultMutableTreeNode)tree.getLastSelectedPathComponent();
+		                	if(selectNode!=null&&selectNode.getLevel()==1){
+		                		frame = new AddTableFrame(treeMenu,pw,br);
+								frame.setLocation(830, 350);
+								frame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+								frame.setVisible(true);
+		                	}	
+		                	else 
+		                		JOptionPane.showMessageDialog(null,"请先选择建表的数据库","错误",JOptionPane.PLAIN_MESSAGE);
 		                } catch (Exception e) {
 		                    e.printStackTrace();
 		                }
@@ -148,50 +153,56 @@ public class TreeMenu {
 				DefaultMutableTreeNode selectNode = (DefaultMutableTreeNode)tree.getLastSelectedPathComponent();
 				String name;
 				System.out.println("进入点击事件");
-				label:
-					while(true) {
-						String change=cdb.exchangDatabase(selectNode.toString(), pw, br);//切换数据库
-						if(change.equals("success")) {
-							String[] str; 
-							String propertys;
-							str=frame.getStr();		
-							name=str[0];
-							System.out.println(name);
-							propertys=str[1];
-							System.out.println(propertys);
-							frame.dispose();
-							String string=ctb.createTable(selectNode.toString(), name, propertys, pw, br);
-							if(string.equals("success")) {
-								for(int i=0;i<dblist.getDbNum();i++) {
-									if(dblist.getList().get(i).getName().equals(selectNode.toString())) {
-										Table table=new Table(name);
-										table.setRead(true);
-										Property property;
-										String[] str2;
-										String[] strings=new String[2];
-										str2=propertys.split(",");
-										for(String temp:str2) {
-											strings=temp.split(" ");
-											property=new Property<>(strings[0], strings[1]);
-											table.addProperty(property);
+				if(selectNode!=null&&selectNode.getLevel()==1){
+					label:
+						while(true) {
+							String change=cdb.exchangDatabase(selectNode.toString(), pw, br);//切换数据库
+							if(change.equals("success")) {
+//								String[] str; 
+								String propertys;
+//								str=frame.getStr();		
+//								name=str[0];
+//								System.out.println(name);
+//								propertys=str[1];
+//								System.out.println(propertys);
+								name=frame.getTableName();
+								propertys=frame.getPropertyStr();
+								frame.dispose();
+								String string=ctb.createTable(selectNode.toString(), name, propertys, pw, br);
+								if(string.equals("success")) {
+									for(int i=0;i<dblist.getDbNum();i++) {
+										if(dblist.getList().get(i).getName().equals(selectNode.toString())) {
+											Table table=new Table(name);
+											table.setRead(true);
+											Property property;
+											String[] str2;
+											String[] strings=new String[2];
+											str2=propertys.split(",");
+											for(String temp:str2) {
+												strings=temp.split(" ");
+												if(!strings[0].equals("primary")&&!strings[1].contains("key")){
+													property=new Property<>(strings[0], strings[1]);
+													table.addProperty(property);
+												}
+											}
+											dblist.getList().get(i).addTable(table);
+											break;
 										}
-										dblist.getList().get(i).addTable(table);
-										break;
 									}
+									setTree();
+									break;
 								}
-								setTree();
-								break;
+								else {
+									JOptionPane.showMessageDialog(null,string,"错误",JOptionPane.PLAIN_MESSAGE); 
+									break;
+								}
 							}
 							else {
-								JOptionPane.showMessageDialog(null,string,"错误",JOptionPane.PLAIN_MESSAGE); 
-								break;
+								JOptionPane.showMessageDialog(null,change,"错误",JOptionPane.PLAIN_MESSAGE); 
+								continue label;
 							}
 						}
-						else {
-							JOptionPane.showMessageDialog(null,change,"错误",JOptionPane.PLAIN_MESSAGE); 
-							continue label;
-						}
-					}
+				}
 			}
 		};
 		return listener;
@@ -203,15 +214,17 @@ public class TreeMenu {
 			public void actionPerformed(ActionEvent e) {
 				DefaultMutableTreeNode selectNode = (DefaultMutableTreeNode)tree.getLastSelectedPathComponent();
 				System.out.println("进入点击事件");
-				String string=cdb.dropDatabase(selectNode.toString(), pw, br);
-				if(string.equals("success")) {
-					dblist.deleteDb(selectNode.toString());
-					JOptionPane.showMessageDialog(null,"删除成功！","删除数据库",JOptionPane.PLAIN_MESSAGE); 
-					setTree();
-				}
-				else {
-					JOptionPane.showMessageDialog(null,string,"错误",JOptionPane.PLAIN_MESSAGE);
-					return;
+				if(selectNode!=null&&selectNode.getLevel()==1){
+					String string=cdb.dropDatabase(selectNode.toString(), pw, br);
+					if(string.equals("success")) {
+						dblist.deleteDb(selectNode.toString());
+						JOptionPane.showMessageDialog(null,"删除成功！","删除数据库",JOptionPane.PLAIN_MESSAGE); 
+						setTree();
+					}
+					else {
+						JOptionPane.showMessageDialog(null,string,"错误",JOptionPane.PLAIN_MESSAGE);
+						return;
+					}
 				}
 			}
 		};
@@ -229,21 +242,7 @@ public class TreeMenu {
 		};
 		return listener;
 	}
-//	//读入sql文件
-//	public MouseListener readSQL_mouseListner(final JTree tree,DbList dblist) {
-//		MouseListener listener=new MouseAdapter(){
-//			@Override
-//			public void mousePressed(MouseEvent e) {
-//				JFileChooser jf = new JFileChooser();
-//		        jf.setFileSelectionMode(JFileChooser.OPEN_DIALOG | JFileChooser.FILES_ONLY);
-//		        jf.showDialog(null,null);
-//		        File file = jf.getSelectedFile();
-//		        //sql文件处理！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！
-//		        //setTree(tree);
-//			}
-//		};
-//		return listener;
-//	}
+	
 	
 	//新建字段
 	public ActionListener newProperty_mouseListner(final PrintWriter pw,final BufferedReader br) {
@@ -251,23 +250,25 @@ public class TreeMenu {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				DefaultMutableTreeNode selectNode = (DefaultMutableTreeNode)tree.getLastSelectedPathComponent();//选中某表
-				for(int i=0;i<dblist.getDbNum();i++) {
-					if(dblist.getList().get(i).getName().equals(selectNode.getParent().toString())) {
-						for(int j=0;j<dblist.getList().get(i).getTableNum();j++) {
-							if(dblist.getList().get(i).getDataBase().get(j).getName().equals(selectNode.toString())) {
-								Ziduan property=new Ziduan();
-								property.run();
-								dblist.getList().get(i).getDataBase().get(j).addProperty(new Property(property.getName(),property.getType()));
-								/**
-								 * 后续操作 晓宇加个循环
-								 */
-								break;
+				if(selectNode!=null&&selectNode.getLevel()==2){
+					for(int i=0;i<dblist.getDbNum();i++) {
+						if(dblist.getList().get(i).getName().equals(selectNode.getParent().toString())) {
+							for(int j=0;j<dblist.getList().get(i).getTableNum();j++) {
+								if(dblist.getList().get(i).getDataBase().get(j).getName().equals(selectNode.toString())) {
+									Ziduan property=new Ziduan();
+									property.run();
+									dblist.getList().get(i).getDataBase().get(j).addProperty(new Property(property.getName(),property.getType()));
+									/**
+									 * 后续操作 晓宇加个循环
+									 */
+									break;
+								}
 							}
+							break;
 						}
-						break;
 					}
+			        //setTree(tree);
 				}
-		        //setTree(tree);
 			}
 		};
 		return listener;
@@ -280,30 +281,36 @@ public class TreeMenu {
 			public void actionPerformed(ActionEvent e) {
 				DefaultMutableTreeNode selectNode = (DefaultMutableTreeNode)tree.getLastSelectedPathComponent();//选中表
 				System.out.println("进入点击事件");
-				String change=cdb.exchangDatabase(selectNode.getParent().toString(), pw, br);//切换数据库
-				if(change.equals("success")) {
-					String string=ctb.dropTable(selectNode.toString(), pw, br);
-					if(string.equals("success")) {
-						for(int i=0;i<dblist.getDbNum();i++) {
-							if(dblist.getList().get(i).getName().equals(selectNode.getParent().toString())) {//判断数据库
-								for(int j=0;j<dblist.getList().get(i).getTableNum();j++) {
-									if(dblist.getList().get(i).getDataBase().get(j).getName().equals(selectNode.toString())) {//判断表
-										dblist.getList().get(i).deleteTable(selectNode.toString());
-										JOptionPane.showMessageDialog(null,"删除成功！","删除表",JOptionPane.PLAIN_MESSAGE); 
-										setTree();
-										return;
+				if(selectNode!=null&&selectNode.getLevel()==2){
+					String change=cdb.exchangDatabase(selectNode.getParent().toString(), pw, br);//切换数据库
+					if(change.equals("success")) {
+						String string=ctb.dropTable(selectNode.toString(), pw, br);
+						if(string.equals("success")) {
+							for(int i=0;i<dblist.getDbNum();i++) {
+								if(dblist.getList().get(i).getName().equals(selectNode.getParent().toString())) {//判断数据库
+									for(int j=0;j<dblist.getList().get(i).getTableNum();j++) {
+										if(dblist.getList().get(i).getDataBase().get(j).getName().equals(selectNode.toString())) {//判断表
+											dblist.getList().get(i).deleteTable(selectNode.toString());
+											JOptionPane.showMessageDialog(null,"删除成功！","删除表",JOptionPane.PLAIN_MESSAGE); 
+											setTree();
+											return;
+										}
 									}
 								}
 							}
 						}
+						else {
+							JOptionPane.showMessageDialog(null,string,"错误",JOptionPane.PLAIN_MESSAGE); 
+							return;
+						}
 					}
-					else {
-						JOptionPane.showMessageDialog(null,string,"错误",JOptionPane.PLAIN_MESSAGE); 
+					else{
+						JOptionPane.showMessageDialog(null,"change","错误",JOptionPane.PLAIN_MESSAGE); 
 						return;
 					}
 				}
 				else{
-					JOptionPane.showMessageDialog(null,"change","错误",JOptionPane.PLAIN_MESSAGE); 
+					JOptionPane.showMessageDialog(null,"请先选中要删除的表","错误",JOptionPane.PLAIN_MESSAGE);
 					return;
 				}
 			}
@@ -363,33 +370,39 @@ public class TreeMenu {
 			public void actionPerformed(ActionEvent e) {
 				DefaultMutableTreeNode selectNode = (DefaultMutableTreeNode)tree.getLastSelectedPathComponent();//选中字段
 				System.out.println("进入点击事件");
-				String change=cdb.exchangDatabase(selectNode.getParent().getParent().toString(), pw, br);//切换数据库
-				if(change.equals("success")) {
-					String string=cpt.dropColumn(selectNode.getParent().toString(), selectNode.toString(), pw, br);
-					if(string.equals("success")) {
-						for(int i=0;i<dblist.getDbNum();i++) {
-	  						if(dblist.getList().get(i).getName().equals(selectNode.getParent().getParent().toString())) {
-	  							for(int j=0;j<dblist.getList().get(i).getTableNum();j++) {
-	  								if(dblist.getList().get(i).getDataBase().get(j).getName().equals(selectNode.getParent().toString())) {
-	  									for(int k=0;k<dblist.getList().get(i).getDataBase().get(j).getPropertyNum();k++)
-	  										if(dblist.getList().get(i).getDataBase().get(j).getPropertyList().get(k).getName().equals(selectNode.toString())) {
-	  											dblist.getList().get(i).getDataBase().get(j).deleteProperty(selectNode.toString());
-	  											JOptionPane.showMessageDialog(null,"删除成功！","删除字段",JOptionPane.PLAIN_MESSAGE); 
-	  											setTree();
-	  											return;
-	  										}
-	  								}
-	  							}
-	  						}
+				if(selectNode!=null&&selectNode.getLevel()==3){
+					String change=cdb.exchangDatabase(selectNode.getParent().getParent().toString(), pw, br);//切换数据库
+					if(change.equals("success")) {
+						String string=cpt.dropColumn(selectNode.getParent().toString(), selectNode.toString(), pw, br);
+						if(string.equals("success")) {
+							for(int i=0;i<dblist.getDbNum();i++) {
+		  						if(dblist.getList().get(i).getName().equals(selectNode.getParent().getParent().toString())) {
+		  							for(int j=0;j<dblist.getList().get(i).getTableNum();j++) {
+		  								if(dblist.getList().get(i).getDataBase().get(j).getName().equals(selectNode.getParent().toString())) {
+		  									for(int k=0;k<dblist.getList().get(i).getDataBase().get(j).getPropertyNum();k++)
+		  										if(dblist.getList().get(i).getDataBase().get(j).getPropertyList().get(k).getName().equals(selectNode.toString())) {
+		  											dblist.getList().get(i).getDataBase().get(j).deleteProperty(selectNode.toString());
+		  											JOptionPane.showMessageDialog(null,"删除成功！","删除字段",JOptionPane.PLAIN_MESSAGE); 
+		  											setTree();
+		  											return;
+		  										}
+		  								}
+		  							}
+		  						}
+							}
+						}
+						else {
+							JOptionPane.showMessageDialog(null,string,"错误",JOptionPane.PLAIN_MESSAGE); 
+							return;
 						}
 					}
 					else {
-						JOptionPane.showMessageDialog(null,string,"错误",JOptionPane.PLAIN_MESSAGE); 
+						JOptionPane.showMessageDialog(null,change,"错误",JOptionPane.PLAIN_MESSAGE); 
 						return;
 					}
 				}
-				else {
-					JOptionPane.showMessageDialog(null,change,"错误",JOptionPane.PLAIN_MESSAGE); 
+				else{
+					JOptionPane.showMessageDialog(null,"请正确选择字段","错误",JOptionPane.PLAIN_MESSAGE); 
 					return;
 				}
 			}
@@ -405,8 +418,13 @@ public class TreeMenu {
 			int num=Integer.valueOf(br.readLine());
 			databaseName=new String[num];
 			for(int i=0;i<num;i++){
-				databaseName[i]=br.readLine();
-				dblist.addDb(new DataBase(databaseName[i]));
+				databaseName[i]=br.readLine();				
+				dblist.addDb(new DataBase(databaseName[i]));			
+			}
+			
+			for(int i=0;i<num;i++){
+				cdb.exchangDatabase(databaseName[i].toString(), pw, br);
+				getTable(databaseName[i],pw,br);
 			}
 			setTree();
 		} catch (IOException e) {
@@ -415,13 +433,12 @@ public class TreeMenu {
 	}
 	
 	//获取数据库中的表个数及名称
-	public void getTable(PrintWriter pw,BufferedReader br){
+	public void getTable(String databaseName,PrintWriter pw,BufferedReader br){
 		String[] tableName = null;
-		DefaultMutableTreeNode selectNode = (DefaultMutableTreeNode)tree.getLastSelectedPathComponent();
-		String change=cdb.exchangDatabase(selectNode.toString(), pw, br);//切换数据库
+		String change="success";
 		DataBase db = null;
 		for(int i=0;i<dblist.getDbNum();i++) {
-			if(dblist.getList().get(i).getName().equals(selectNode.toString())) {
+			if(dblist.getList().get(i).getName().equals(databaseName)) {
 				db = dblist.getList().get(i);
 				break;
 			}
@@ -431,10 +448,14 @@ public class TreeMenu {
 				pw.println("get table");
 				try {
 					int num=Integer.valueOf(br.readLine());
+					System.out.println(num);
 					tableName=new String[num];
 					for(int i=0;i<num;i++){
 						tableName[i]=br.readLine(); 
 						db.addTable(new Table(tableName[i]));
+					}
+					for(int i=0;i<num;i++){
+						getProperty(databaseName,tableName[i],pw,br);
 					}
 					db.setRead(true);
 					setTree();
@@ -446,14 +467,13 @@ public class TreeMenu {
 	}
 		
 	//获取数据库中的表中字段数
-	public void getProperty(String tableName,PrintWriter pw,BufferedReader br){
-		DefaultMutableTreeNode selectNode = (DefaultMutableTreeNode)tree.getLastSelectedPathComponent();
-		String change=cdb.exchangDatabase(selectNode.getParent().toString(), pw, br);//切换数据库
+	public void getProperty(String databaseName,String tableName,PrintWriter pw,BufferedReader br){
+		String change="success";
 		Table table=null;
 		for(int i=0;i<dblist.getDbNum();i++) {
-			if(dblist.getList().get(i).getName().equals(selectNode.getParent().toString())) {
+			if(dblist.getList().get(i).getName().equals(databaseName)) {
 				for(int j=0;j<dblist.getList().get(i).getTableNum();j++) {
-					if(dblist.getList().get(i).getDataBase().get(j).getName().equals(selectNode.toString())) {
+					if(dblist.getList().get(i).getDataBase().get(j).getName().equals(tableName)) {
 						table=dblist.getList().get(i).getDataBase().get(j);
 						break;
 					}
@@ -467,6 +487,7 @@ public class TreeMenu {
 				String[] propertyName = null;
 				try {
 					int num=Integer.valueOf(br.readLine());
+					System.out.println(num);
 					propertyName=new String[num];
 					for(int i=0;i<num;i++){
 						propertyName[i]=br.readLine(); 

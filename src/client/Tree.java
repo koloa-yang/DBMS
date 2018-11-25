@@ -173,14 +173,14 @@ public class Tree {
 							
 	                }
 					else if(e.getClickCount()==1) {
-//						System.out.println("µ¥»÷");
+
 						try{
-							if(selectNode.getLevel()==1)
-								treeMenu.getTable(pw, br);
-							if(selectNode.getLevel()==2){
-								String tableName=selectNode.toString();
-								treeMenu.getProperty(tableName, pw, br);
-							}
+//							if(selectNode.getLevel()==1)
+//								treeMenu.getTable(pw, br);
+//							if(selectNode.getLevel()==2){
+//								String tableName=selectNode.toString();
+//								treeMenu.getProperty(tableName, pw, br);
+//							}
 						}
 						catch(Exception e1){
 							

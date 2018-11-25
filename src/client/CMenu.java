@@ -83,15 +83,16 @@ public class CMenu {
 						br=getReader(socket);
 						pw=getWriter(socket);
 						connected=true;
+					
+						//建树
+						tree=new Tree(TreePanel,tablePanel,pw, br);
+						tree.setTree();
+						tree.setListener();
+						tree.setTreeMenu();
+						//建命令行
+						command=new Command(commandPanel,pw,br);
+						command.setCommand();
 					}
-					//建树
-					tree=new Tree(TreePanel,tablePanel,pw, br);
-					tree.setTree();
-					tree.setListener();
-					tree.setTreeMenu();
-					//建命令行
-					command=new Command(commandPanel,pw,br);
-					command.setCommand();
 						
 				} catch (UnknownHostException e1) {
 					// TODO Auto-generated catch block
@@ -165,8 +166,10 @@ public class CMenu {
 			public void actionPerformed(ActionEvent e){
 				CDatabase cdb=new CDatabase(null);
 				String inputValue = JOptionPane.showInputDialog("Please input the database name");
-				String message=cdb.exchangDatabase(inputValue, pw, br);//切换数据库
-				JOptionPane.showMessageDialog(null,message,"Message",JOptionPane.PLAIN_MESSAGE);
+				if(inputValue!=null){
+					String message=cdb.exchangDatabase(inputValue, pw, br);//切换数据库
+					JOptionPane.showMessageDialog(null,message,"Message",JOptionPane.PLAIN_MESSAGE);
+				}
 			}
 		});
 		mntmNewMenuItem = new JMenuItem("重命名");

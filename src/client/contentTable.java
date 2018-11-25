@@ -153,6 +153,7 @@ public class contentTable {
 		butt.add(btnadd);
 		butt.add(btndelete);
 		tablePanel.add(butt, BorderLayout.SOUTH);
+		tablePanel.updateUI();
 	}
 	
 	public void addProperty(){

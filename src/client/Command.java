@@ -20,13 +20,9 @@ public class Command {
 	private JScrollPane scrollPane;
 	private JTextPane textArea_out;
 	private JTextField textField_in;
-	private BufferedReader br;
-	private PrintWriter pw;
 	
 	public Command(JPanel commandPanel,final PrintWriter pw,final BufferedReader br){
 		this.commandPanel=commandPanel;
-		this.pw=pw;
-		this.br=br;
 		//设置textArea和textField的属性
 		textArea_out=new JTextPane();
 		textArea_out.setEditable(false);
@@ -48,30 +44,29 @@ public class Command {
 			  }
 			   String out=textArea_out.getText();
 			   if(content.contains("select")){
-				   System.out.println("你输入了select");
 				   if(back.equals("success")){
 					   String getone;
 					   try{
-					   int row=Integer.valueOf(br.readLine());
-					   int col=Integer.valueOf(br.readLine());
-					   String tableStr="";
-					   for(int i=0;i<row;i++){
-							for(int j=0;j<col;j++){
-								getone=br.readLine();
-								//加字符串
-								tableStr+=getone;
-								//加空格
-								for(int k=0;k<(12-getone.length());k++){
-									tableStr=tableStr+" ";
-								}	
+						   int row=Integer.valueOf(br.readLine());
+						   int col=Integer.valueOf(br.readLine());
+						   String tableStr="";
+						   for(int i=0;i<row;i++){
+								for(int j=0;j<col;j++){
+									getone=br.readLine();
+									//加字符串
+									tableStr+=getone;
+									//加空格
+									for(int k=0;k<(12-getone.length());k++){
+										tableStr=tableStr+" ";
+									}	
+								}
+								tableStr+="\n";
 							}
-							tableStr+="\n";
-						}
-					   out+=content+"\n\n----";
-					   out+=back+"----\n\n"+tableStr+"\n\nSQL>";
-					   textArea_out.setText(out);
-				   }catch(IOException e){
-				   }
+						   out+=content+"\n\n----";
+						   out+=back+"----\n\n"+tableStr+"\n\nSQL>";
+						   textArea_out.setText(out);
+					   	}catch(IOException e){
+					   	}
 				   }
 			   }
 			   else{
@@ -79,7 +74,7 @@ public class Command {
 				   out+=back+"----\n\nSQL>";
 				   textArea_out.setText(out);
 			   }
-				   
+			   
 			   textField_in.setText("");
 			   }    
 			  });
