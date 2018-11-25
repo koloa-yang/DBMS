@@ -10,12 +10,14 @@ import java.io.IOException;
 import java.io.PrintWriter;
 
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.JTextPane;
 
 public class Command {
 	
 	private JPanel commandPanel;
+	private JScrollPane scrollPane;
 	private JTextPane textArea_out;
 	private JTextField textField_in;
 	private BufferedReader br;
@@ -46,10 +48,34 @@ public class Command {
 			  }
 			   String out=textArea_out.getText();
 			   if(content.contains("select")){
-				   
+				   System.out.println("你输入了select");
+				   if(back.equals("success")){
+					   String getone;
+					   try{
+					   int row=Integer.valueOf(br.readLine());
+					   int col=Integer.valueOf(br.readLine());
+					   String tableStr="";
+					   for(int i=0;i<row;i++){
+							for(int j=0;j<col;j++){
+								getone=br.readLine();
+								//加字符串
+								tableStr+=getone;
+								//加空格
+								for(int k=0;k<(12-getone.length());k++){
+									tableStr=tableStr+" ";
+								}	
+							}
+							tableStr+="\n";
+						}
+					   out+=content+"\n\n----";
+					   out+=back+"----\n\n"+tableStr+"\n\nSQL>";
+					   textArea_out.setText(out);
+				   }catch(IOException e){
+				   }
+				   }
 			   }
 			   else{
-				   out+=content+"\n----";
+				   out+=content+"\n\n----";
 				   out+=back+"----\n\nSQL>";
 				   textArea_out.setText(out);
 			   }
@@ -59,9 +85,10 @@ public class Command {
 			  });
 	}
 	
-	public void setCommand(){
+	public void setCommand(){	
+		scrollPane=new JScrollPane(textArea_out);
+		commandPanel.add(scrollPane ,BorderLayout.CENTER);
 		commandPanel.add(textField_in, BorderLayout.SOUTH);
-		commandPanel.add(textArea_out, BorderLayout.CENTER);
 	}
 	
 	public void clear(){

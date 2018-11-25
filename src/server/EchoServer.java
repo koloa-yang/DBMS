@@ -57,12 +57,12 @@ class Handler implements Runnable{
 	
 	private PrintWriter getWriter(Socket socket)throws IOException{
 		OutputStream socketOut=socket.getOutputStream();	
-		return new PrintWriter(socketOut, true);//参数为true表示每写一行，PrintWriter缓存就自动溢出，把数据写到目的
+		return new PrintWriter(new OutputStreamWriter(socketOut,"GB18030"), true);//参数为true表示每写一行，PrintWriter缓存就自动溢出，把数据写到目的
 	}
  	
 	private BufferedReader getReader(Socket socket)throws IOException {
 		InputStream socketIn=socket.getInputStream();
-		return new BufferedReader(new InputStreamReader(socketIn));
+		return new BufferedReader(new InputStreamReader(socketIn,"GB18030"));
 		
 	}
 	

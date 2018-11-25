@@ -46,23 +46,22 @@ public class contentTable {
 			public void actionPerformed(ActionEvent e){
 				model.fireTableDataChanged();
 				int rowNum=model.getRowCount();//行数
-//				JOptionPane.showMessageDialog(null,rowNum,"增加数量",JOptionPane.PLAIN_MESSAGE);
 				//拼接字符串
 				String typeStr="";
 				String contentStr="";
-//				String sss=model.getValueAt(0, 0).toString();
-//				JOptionPane.showMessageDialog(null,"成功读取","错误",JOptionPane.PLAIN_MESSAGE);
 				for(int i=0;i<model.getColumnCount();i++){
 					typeStr+=header[i];
-					if(isNumeric(model.getValueAt(rowNum-1, i).toString()))
-						contentStr+=model.getValueAt(rowNum-1, i).toString();
-					else
-						contentStr=contentStr+"\""+model.getValueAt(rowNum-1, i).toString()+"\"";
+//					if(isNumeric(model.getValueAt(rowNum-1, i).toString()))
+					contentStr+=model.getValueAt(rowNum-1, i).toString();
+//					else
+//						contentStr=contentStr+"\""+model.getValueAt(rowNum-1, i).toString()+"\"";
 					if(i!=model.getColumnCount()-1){
 						typeStr+=",";
 						contentStr+=",";
 					}
 				}
+				System.out.println(typeStr);
+				System.out.println(contentStr);
 				String message=cpt.insert(tableName, typeStr, contentStr, pw, br);
 				if(message.equals("success")){
 					//加一行空行用于添加数据

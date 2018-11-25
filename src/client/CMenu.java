@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.UnknownHostException;
@@ -56,12 +57,12 @@ public class CMenu {
 	
 	private PrintWriter getWriter(Socket socket)throws IOException{
 		OutputStream socketOut=socket.getOutputStream();	
-		return new PrintWriter(socketOut, true);
+		return new PrintWriter(new OutputStreamWriter(socketOut,"GB18030"), true);
 	}
 
 	private BufferedReader getReader(Socket socket)throws IOException {
 		InputStream socketIn=socket.getInputStream();
-		return new BufferedReader(new InputStreamReader(socketIn));
+		return new BufferedReader(new InputStreamReader(socketIn,"GB18030"));
 
 	}
 	
@@ -102,6 +103,26 @@ public class CMenu {
 			}
 		});
 		mnNewMenu1.add(mntmNewMenuItem);
+		
+		mntmNewMenuItem = new JMenuItem("备份数据库");
+		mntmNewMenuItem.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e){
+				pw.println("copy");
+				try {
+					String get=br.readLine();
+					if(get.equals("success")){
+						JOptionPane.showMessageDialog(null,"备份成功","错误",JOptionPane.PLAIN_MESSAGE);
+					}
+					else
+						JOptionPane.showMessageDialog(null,"备份失败","错误",JOptionPane.PLAIN_MESSAGE);
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			}
+		});
+		mnNewMenu1.add(mntmNewMenuItem);
+		
 		mntmNewMenuItem = new JMenuItem("测试");
 		mntmNewMenuItem.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){

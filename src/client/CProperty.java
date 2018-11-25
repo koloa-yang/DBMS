@@ -115,6 +115,7 @@ public class CProperty {
 				for(int i=0;i<row;i++){
 					for(int j=0;j<col;j++){
 						content[i][j]=br.readLine();
+						System.out.println(content[i][j]);
 					}
 				}
 				return content;

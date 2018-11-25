@@ -133,7 +133,7 @@ public class Tree {
 					tree.setSelectionPath(path);
 					DefaultMutableTreeNode selectNode = (DefaultMutableTreeNode)tree.getLastSelectedPathComponent();
 					if(e.getClickCount()==2){
-						System.out.println("双击");
+//						System.out.println("双击");
 						try{
 							if(selectNode.getLevel()==2) {//如果双击表节点 打开表	
 								cdb.exchangDatabase(selectNode.getParent().toString(), pw, br);//切换数据库
@@ -155,7 +155,7 @@ public class Tree {
 							
 					}
 					else if (e.getClickCount()==1&&e.getButton() == MouseEvent.BUTTON3) { 
-						System.out.println("右键");
+//						System.out.println("右键");
 						if(selectNode!=null) {
 							if(selectNode.getLevel()==1) {//0是根节点 1是数据库 2是表 3是列
 								popMenu_tree_db.show(TreePanel, e.getX(), e.getY()+30);
@@ -173,7 +173,7 @@ public class Tree {
 							
 	                }
 					else if(e.getClickCount()==1) {
-						System.out.println("单击");
+//						System.out.println("单击");
 						try{
 							if(selectNode.getLevel()==1)
 								treeMenu.getTable(pw, br);

@@ -218,37 +218,7 @@ public class TreeMenu {
 		
 		return listener;
 	}
-//	//数据库重命名
-//	public MouseListener renameDb_mouseListner(final JTree tree,DbList dblist) {
-//		MouseListener listener=new MouseAdapter(){
-//			@Override
-//			public void mousePressed(MouseEvent e) {
-//				DefaultMutableTreeNode selectNode = (DefaultMutableTreeNode)tree.getLastSelectedPathComponent();
-//				String name;
-//				System.out.println("进入点击事件");
-//				label:
-//					while(true) {
-//						name=JOptionPane.showInputDialog(null,"请输入新建数据库的名字：\n","数据库重命名",JOptionPane.PLAIN_MESSAGE);
-//						for(int i=0;i<dblist.getDbNum();i++) {
-//							if(dblist.getList().get(i).getName().equals(name)) {
-//								JOptionPane.showInputDialog(null,"此名字已存在，请重新输入：\n","错误",JOptionPane.PLAIN_MESSAGE); 
-//								continue label;
-//							}	
-//						}
-//						for(int j=0;j<dblist.getDbNum();j++) {
-//							if(dblist.getList().get(j).getName().equals(selectNode.toString())) {
-//								dblist.getList().get(j).setName(name);
-//								System.out.println("已重命名数据库");
-//								break;
-//							}
-//						}
-//						break;
-//					}
-//				//setTree(tree);	
-//			}
-//		};
-//		return listener;
-//	}
+
 	//重新读入数据库
 	public MouseListener reReadDb_mouseListner() {
 		MouseListener listener=new MouseAdapter(){
@@ -385,34 +355,7 @@ public class TreeMenu {
 		};
 		return listener;
 	}
-//	//修改字段属性
-//	public MouseListener setProperty_mouseListner(final JTree tree,DbList dblist) {
-//		MouseListener listener=new MouseAdapter(){
-//			@Override
-//			public void mousePressed(MouseEvent e) {
-//				DefaultMutableTreeNode selectNode = (DefaultMutableTreeNode)tree.getLastSelectedPathComponent();//选中某字段
-//				for(int i=0;i<dblist.getDbNum();i++) {
-//					if(dblist.getList().get(i).getName().equals(selectNode.getParent().getParent().toString())) {//判断数据库
-//						for(int j=0;j<dblist.getList().get(i).getTableNum();j++) {
-//							if(dblist.getList().get(i).getDataBase().get(j).getName().equals(selectNode.getParent().toString())) {//判断表
-//								for(int k=0;k<dblist.getList().get(i).getDataBase().get(j).getPropertyNum();k++)
-//									if(dblist.getList().get(i).getDataBase().get(j).getPropertyList().get(k).equals(selectNode.toString())) {//判断字段
-//										//字段属性弹窗！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！
-//										dblist.getList().get(i).getDataBase().get(j).getPropertyList().get(k).
-//										break;
-//									}
-//								break;
-//							}
-//							
-//						}
-//						break;
-//					}
-//				}
-//		        //setTree(tree);
-//			}
-//		};
-//		return listener;
-//	}
+
 	//删除字段 
 	public ActionListener deleteProperty_mouseListner(final PrintWriter pw,final BufferedReader br) {
 		ActionListener listener=new ActionListener(){
@@ -537,51 +480,5 @@ public class TreeMenu {
 			}
 		}
 	}
-//	//字段重命名
-//	public MouseListener renameProperty_mouseListner(final JTree tree,DbList dblist) {
-//		MouseListener listener=new MouseAdapter(){
-//			@Override
-//			public void mousePressed(MouseEvent e) {
-//				DefaultMutableTreeNode selectNode = (DefaultMutableTreeNode)tree.getLastSelectedPathComponent();
-//				String name;
-//				System.out.println("进入点击事件");
-//				label:
-//					while(true) {
-//						name=JOptionPane.showInputDialog(null,"请输入新建数据库的名字：\n","数据库重命名",JOptionPane.PLAIN_MESSAGE);
-//						for(int i=0;i<dblist.getDbNum();i++) {
-//							if(dblist.getList().get(i).getName().equals(selectNode.getParent().getParent().toString())) {
-//								for(int j=0;j<dblist.getList().get(i).getTableNum();j++) {
-//									if(dblist.getList().get(i).getDataBase().get(j).getName().equals(selectNode.getParent().toString())) {
-//										for(int k=0;k<dblist.getList().get(i).getDataBase().get(j).getPropertyNum();k++)
-//											if(dblist.getList().get(i).getDataBase().get(j).getPropertyList().get(k).getName().equals(name)) {
-//												JOptionPane.showInputDialog(null,"此名字已存在，请重新输入：\n","错误",JOptionPane.PLAIN_MESSAGE); 
-//												continue label;
-//											}
-//									}
-//								}
-//							}
-//						}
-//						for(int i=0;i<dblist.getDbNum();i++) {
-//							if(dblist.getList().get(i).getName().equals(selectNode.getParent().getParent().toString())) {
-//								for(int j=0;j<dblist.getList().get(i).getTableNum();j++) {
-//									if(dblist.getList().get(i).getDataBase().get(j).getName().equals(selectNode.getParent().toString())) {
-//										for(int k=0;k<dblist.getList().get(i).getDataBase().get(j).getPropertyNum();k++)
-//											if(dblist.getList().get(i).getDataBase().get(j).getPropertyList().get(k).equals(selectNode.toString())) {
-//												dblist.getList().get(i).getDataBase().get(j).getPropertyList().get(k).setName(name);
-//												System.out.println("已重命名该字段");
-//												break;
-//											}
-//										break;
-//									}
-//								}
-//								break;
-//							}
-//						}
-//						break;
-//					}
-//				//setTree(tree);	
-//			}
-//		};
-//		return listener;
-//	}
+
 }
