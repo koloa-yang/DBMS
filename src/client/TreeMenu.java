@@ -232,10 +232,16 @@ public class TreeMenu {
 					EventQueue.invokeLater(new Runnable() {
 			            public void run() {
 			                try {
-			                	addPropertyFrame = new AddPropertyFrame(treeMenu,pw,br);
-			                	addPropertyFrame.setLocation(830, 350);
-			                	addPropertyFrame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
-			                	addPropertyFrame.setVisible(true);
+			                	DefaultMutableTreeNode selectNode = (DefaultMutableTreeNode)tree.getLastSelectedPathComponent();
+			                	if(selectNode!=null&&selectNode.getLevel()==2){
+			                		addPropertyFrame = new AddPropertyFrame(treeMenu,pw,br);
+				                	addPropertyFrame.setLocation(830, 350);
+				                	addPropertyFrame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+				                	addPropertyFrame.setVisible(true);
+			                	}
+			                	else{
+			                		JOptionPane.showMessageDialog(null,"请先选择创建新字段的表","错误",JOptionPane.PLAIN_MESSAGE);
+			                	}
 			                } catch (Exception e) {
 			                    e.printStackTrace();
 			                }

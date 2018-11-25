@@ -107,36 +107,36 @@ public class CMenu {
 		
 		mntmNewMenuItem = new JMenuItem("备份数据库");
 		mntmNewMenuItem.addActionListener(new ActionListener(){
-			public void actionPerformed(ActionEvent e){
-				pw.println("copy");
+			public void actionPerformed(ActionEvent e){	
 				try {
+					pw.println("copy");
 					String get=br.readLine();
 					if(get.equals("success")){
 						JOptionPane.showMessageDialog(null,"备份成功","错误",JOptionPane.PLAIN_MESSAGE);
 					}
 					else
 						JOptionPane.showMessageDialog(null,"备份失败","错误",JOptionPane.PLAIN_MESSAGE);
-				} catch (IOException e1) {
+				} catch (Exception e1) {
 				}
 			}
 		});
 		mnNewMenu1.add(mntmNewMenuItem);
 		
-		mntmNewMenuItem = new JMenuItem("测试");
-		mntmNewMenuItem.addActionListener(new ActionListener(){
-			public void actionPerformed(ActionEvent e){
-				@SuppressWarnings("unused")
-				String inputValue = JOptionPane.showInputDialog("Please input the table name");
-				pw.println(inputValue);
-				String ttt;
-				try {
-					ttt = br.readLine();
-					JOptionPane.showConfirmDialog(null, ttt, ttt, JOptionPane.YES_NO_OPTION);
-				} catch (IOException e1) {
-				}	
-			}
-		});
-		mnNewMenu1.add(mntmNewMenuItem);
+//		mntmNewMenuItem = new JMenuItem("测试");
+//		mntmNewMenuItem.addActionListener(new ActionListener(){
+//			public void actionPerformed(ActionEvent e){
+//				@SuppressWarnings("unused")
+//				String inputValue = JOptionPane.showInputDialog("Please input the table name");
+//				pw.println(inputValue);
+//				String ttt;
+//				try {
+//					ttt = br.readLine();
+//					JOptionPane.showConfirmDialog(null, ttt, ttt, JOptionPane.YES_NO_OPTION);
+//				} catch (IOException e1) {
+//				}	
+//			}
+//		});
+//		mnNewMenu1.add(mntmNewMenuItem);
 		
 		//第二个标签
 		mnNewMenu2 = new JMenu("数据库");
@@ -183,17 +183,6 @@ public class CMenu {
 		});
 		mntmNewMenuItem = new JMenuItem("重命名");
 		mnNewMenu2.add(mntmNewMenuItem);
-		mntmNewMenuItem.addActionListener(new ActionListener(){
-			public void actionPerformed(ActionEvent e){
-				try{
-					CDatabase cdb=new CDatabase(null);
-					String inputValue = JOptionPane.showInputDialog("Please input the new database name");
-					//String message=cdb.exchangDatabase(inputValue, pw, br);//切换数据库
-					JOptionPane.showMessageDialog(null,"success","Message",JOptionPane.PLAIN_MESSAGE);
-					}catch(Exception e1){
-				}
-			}
-		});
 		
 		//第三个menu标签
 		mnNewMenu3 = new JMenu("表");
